@@ -1,9 +1,6 @@
 # Ignore examples folder
 /examples/
 
-# Ignore libraries folderss
-/libs/
-
 # Ignore tests folder
 /tests/
 
@@ -12,12 +9,11 @@
 .DS_Store
 
 # Ignore object files
-/objects/
-*.o
+/obj/
+/**/*.d
 
 # Ignore pdf files
 *.pdf
 
 # Ignore the project executable (root binary only)
-/megaphone
-*.out
+/cub3d
