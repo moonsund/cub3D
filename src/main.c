@@ -1,4 +1,4 @@
-#include "cub3D.h"
+#include "cub3d.h"
 
 int main(int argc, char **argv)
 {
@@ -7,14 +7,14 @@ int main(int argc, char **argv)
     if (argc != 2)
     {
         printf("Usage: %s <map_file>\n", argv[0]);
-        return 1;
+        return (1);
     }
 
     // Initialize game state and load the map
     if (!initialize_game(&game, argv[1]))
     {
-        fprintf(stderr, "Failed to initialize the game.\n");
-        return 1;
+        printf("Failed to initialize the game.\n");
+        return (1);
     }
 
     // Start the game loop
@@ -23,5 +23,5 @@ int main(int argc, char **argv)
     // Clean up resources
     cleanup_game(&game);
     
-    return 0;
+    return (0);
 }
