@@ -1,6 +1,9 @@
 # Ignore examples folder
 /examples/
 
+# Ignore libraries folderss
+/libs/
+
 # Ignore tests folder
 /tests/
 
