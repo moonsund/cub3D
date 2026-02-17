@@ -97,4 +97,13 @@ clean:
 	fi
 
 fclean: clean
-	$
+	$(RM) $(NAME)
+
+re: fclean all
+
+distclean: fclean
+	@echo ">> Deinitializing submodules (keeping $(LIBS_DIR)/)"
+	@git submodule deinit -f --all || true
+	@# remove checked-out working trees, but keep libs/ directory itself
+	@$(RMR) $(LIBFT_DIR) $(MLX_DIR)
+	@$(MKDIR_P) $(LIBS_DIR)
