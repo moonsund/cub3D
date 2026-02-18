@@ -3,7 +3,7 @@
 
 void cleanup_game(t_game *game)
 {
-
+  (void)game;
 
 
 }

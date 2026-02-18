@@ -18,6 +18,12 @@ typedef struct s_game
 
 
 int main(int argc, char **argv);
+
+// validation.c
+int validate_cli_args(int argc, char *file_name);
+
+
+
 void game_loop(t_game *game);
 void cleanup_game(t_game *game);
 int initialize_game(t_game *game, char *map);

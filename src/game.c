@@ -2,7 +2,7 @@
 
 void game_loop(t_game *game)
 {
-
+  (void)game;
 
   
 }
