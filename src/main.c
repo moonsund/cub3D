@@ -3,7 +3,6 @@
 int main(int argc, char **argv)
 {
     t_game game;
-    t_map map;
 
     if (validate_arguments(argc, argv))
         return (EXIT_FAILURE);
