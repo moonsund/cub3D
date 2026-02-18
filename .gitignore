@@ -17,3 +17,7 @@
 
 # Ignore the project executable (root binary only)
 /cub3d
+
+# Ignore Docker files
+Dockerfile
+docker-compose.yml

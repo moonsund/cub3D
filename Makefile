@@ -13,6 +13,7 @@ MLX_A       := $(MLX_DIR)/libmlx.a
 
 SRCS        := \
 	$(SRC_DIR)/main.c \
+	$(SRC_DIR)/validation.c \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/parse.c \
 	$(SRC_DIR)/events.c \
@@ -23,7 +24,7 @@ OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS        := $(OBJS:.o=.d)
 
 CC          := cc
-CFLAGS      := -Wall -Wextra -Werror
+CFLAGS      := -Wall -Wextra -Werror -Ilibs/libft
 CPPFLAGS    := -I$(INC_DIR)
 
 LDFLAGS     := -L$(LIBFT_DIR) -L$(MLX_DIR)
@@ -97,4 +98,13 @@ clean:
 	fi
 
 fclean: clean
-	$
+	$(RM) $(NAME)
+
+re: fclean all
+
+distclean: fclean
+	@echo ">> Deinitializing submodules (keeping $(LIBS_DIR)/)"
+	@git submodule deinit -f --all || true
+	@# remove checked-out working trees, but keep libs/ directory itself
+	@$(RMR) $(LIBFT_DIR) $(MLX_DIR)
+	@$(MKDIR_P) $(LIBS_DIR)
