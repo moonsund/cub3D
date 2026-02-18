@@ -4,6 +4,12 @@ int main(int argc, char **argv)
 {
     t_game game;
 
+    if (validate_input(argc, argv))
+    {
+        return (EXIT_FAILURE);
+    }
+
+
     if (argc != 2)
     {
         printf("Usage: %s <map_file>\n", argv[0]);

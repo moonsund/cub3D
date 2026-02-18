@@ -1,7 +1,12 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <stdio.h> 
+#include "libft.h"
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
 
 typedef struct s_map
 {
@@ -20,21 +25,20 @@ typedef struct s_game
 int main(int argc, char **argv);
 
 // validation.c
-int validate_cli_args(int argc, char *file_name);
+int validate_input(int argc, char **argv);
 
 
-
-void game_loop(t_game *game);
-void cleanup_game(t_game *game);
+// init.c
 int initialize_game(t_game *game, char *map);
 
 
+// game.c
+void game_loop(t_game *game);
 
 
-
-
-
-
+// utils.c
+int print_error(char *error_message);
+void cleanup_game(t_game *game);
 
 
 
