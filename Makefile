@@ -13,7 +13,7 @@ MLX_A       := $(MLX_DIR)/libmlx.a
 
 SRCS        := \
 	$(SRC_DIR)/main.c \
-	
+	$(SRC_DIR)/validation.c \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/parse.c \
 	$(SRC_DIR)/events.c \
@@ -24,7 +24,7 @@ OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS        := $(OBJS:.o=.d)
 
 CC          := cc
-CFLAGS      := -Wall -Wextra -Werror
+CFLAGS      := -Wall -Wextra -Werror -Ilibs/libft
 CPPFLAGS    := -I$(INC_DIR)
 
 LDFLAGS     := -L$(LIBFT_DIR) -L$(MLX_DIR)
