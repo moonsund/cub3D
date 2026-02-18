@@ -2,7 +2,7 @@
 
 static int has_cub_extension(char *filename);
 
-int validate_input(int argc, char **argv)
+int validate_arguments(int argc, char **argv)
 {
   int fd;
 

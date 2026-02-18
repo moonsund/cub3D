@@ -25,7 +25,7 @@ typedef struct s_game
 int main(int argc, char **argv);
 
 // validation.c
-int validate_input(int argc, char **argv);
+int validate_arguments(int argc, char **argv);
 
 
 // init.c

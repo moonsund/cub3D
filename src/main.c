@@ -4,17 +4,9 @@ int main(int argc, char **argv)
 {
     t_game game;
 
-    if (validate_input(argc, argv))
-    {
+    if (validate_arguments(argc, argv))
         return (EXIT_FAILURE);
-    }
 
-
-    if (argc != 2)
-    {
-        printf("Usage: %s <map_file>\n", argv[0]);
-        return (1);
-    }
 
     // Initialize game state and load the map
     if (!initialize_game(&game, argv[1]))
