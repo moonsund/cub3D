@@ -8,15 +8,10 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
 
 typedef struct s_map
 {
-    t_list *map_data;
+    char **file_data;
     int lines_count;
 
     char *tex_N;
@@ -46,7 +41,11 @@ int validate_arguments(int argc, char **argv);
 
 
 // parse.c
-int parse_file(const char *file_path, t_map *map);
+int initialize_map(const char *file_path, t_map *map);
+
+// parse_helpers.c
+int count_lines_in_file(const char *file_path, int *lines_count);
+void free_file_data(char **file_data, int i);
 
 // init.c
 int initialize_game(t_game *game, char *map);

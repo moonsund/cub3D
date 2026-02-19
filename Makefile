@@ -16,6 +16,7 @@ SRCS        := \
 	$(SRC_DIR)/validation.c \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/parse.c \
+	$(SRC_DIR)/parse_helpers.c \
 	$(SRC_DIR)/events.c \
 	$(SRC_DIR)/game.c \
 	$(SRC_DIR)/utils.c
@@ -24,7 +25,7 @@ OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS        := $(OBJS:.o=.d)
 
 CC          := cc
-CFLAGS      := -Wall -Wextra -Werror -Ilibs/libft
+CFLAGS      := -g -Wall -Wextra -Werror -Ilibs/libft
 CPPFLAGS    := -I$(INC_DIR)
 
 LDFLAGS     := -L$(LIBFT_DIR) -L$(MLX_DIR)

@@ -1,68 +1,83 @@
 #include "cub3d.h"
 
+static int	read_file(const char *file_path, t_map *map);
+// int get_textures_data(t_map *map, t_list curr);
+
 int initialize_map(const char *file_path, t_map *map)
 {
+	if (count_lines_in_file(file_path, &map->lines_count))
+		return (1);
+
 	if (!read_file(file_path, map))
 		return (1);
 
-	if (!procces_data(map));
-		return (1);
+	// if (!procces_data(map));
+	// 	return (1);
 
-	if (!parce_data(map));
-		return (1);
+	// if (!parce_data(map));
+	// 	return (1);
 
-	if (!validate_data(map));
-		return (1);
-
-
+	// if (!validate_data(map));
+	// 	return (1);
+	return (0);
 }
 
-int	read_file(const char *file_path, t_map *map)
+static int	read_file(const char *file_path, t_map *map)
 {
 	int		fd;
 	char	*line;
 	char	*tmp;
-	t_list	*node;
+	int i;
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		return (print_error("The file is not opened.\n"));
+		return (print_error("read_file: Could not open the file.\n"));
 
 	line = get_next_line(fd);
 	if (!line)
 		return (close(fd), print_error("map file is empty.\n"));
 
-	while (line)
+	i = 0;
+	while (i <= map->lines_count)
 	{
-		tmp = normilize(line);
+		line = get_next_line(fd);
+		tmp = ft_strtrim(line, " \n\t");
 		free(line);
 		if (!tmp)
-			return (close(fd), free_lst(map->map_data), map->map_data = NULL,
+			return (close(fd), free_file_data(map->file_data, i),
 				print_error("normalize failed.\n"));
-
-		node = ft_lstnew(tmp);
-		if (!node)
-			return (free(tmp), close(fd), free_lst(map->map_data),
-				map->map_data = NULL, print_error("malloc failed.\n"));
-
-		ft_lstadd_back(&map->map_data, node);
-		line = get_next_line(fd);
+		map->file_data[i] = ft_strdup(tmp);
+		if (!map->file_data[i])
+			return (close(fd), free_file_data(map->file_data, i),
+				print_error("string duplication failed.\n"));
+		i++;
 	}
 	close(fd);
 	return (0);
 }
 
+/*
 
-int procces_data_read(map)
+int procces_data_read(t_map *map)
 {
-	while ()
+	t_list *curr;
+	int param_check_flag;
+
+	curr = map->file_data;
+	while (curr != NULL)
 	{
-		get_colours_data()
+		if (ft_strncmp(curr->content, "NO", 2) || ft_strncmp(curr->content, "SO", 2)
+		|| ft_strncmp(curr->content, "WE", 2) || ft_strncmp(curr->content, "EA", 2) && get_textures_data(map, curr))
+			param_check_flag++;
 		
-		get_textures_data()
+		else if (ft_strncmp(curr->content, "F", 1) || ft_strncmp(curr->content, "C", 1) && get_colours_data(map, curr))
+			param_check_flag++;
+		
+		
+		curr = curr->next;
 	}
 
-	get_map_data()
+	get_map_data(map);
 }	
 
 
@@ -95,3 +110,12 @@ static int parse_walls(line)
 	return (0);
 
 }
+
+int get_textures_data(t_map *map, t_list curr)
+{
+
+
+
+}
+
+*/
