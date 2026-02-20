@@ -11,6 +11,7 @@
 # Ignore object files
 /obj/
 /**/*.d
+/obj_debug
 
 # Ignore pdf files
 *.pdf
