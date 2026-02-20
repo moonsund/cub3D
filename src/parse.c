@@ -1,12 +1,16 @@
 #include "cub3d.h"
 
 static int	read_file(const char *file_path, t_map *map);
-// int get_textures_data(t_map *map, t_list curr);
+int get_textures_data(t_map *map, t_list curr);
 
 int initialize_map(const char *file_path, t_map *map)
 {
 	if (count_lines_in_file(file_path, &map->lines_count))
 		return (1);
+
+	map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
+	if (!map->file_data)
+		return (print_error("initialize_map: malloc file data.\n"));
 
 	if (!read_file(file_path, map))
 		return (1);
@@ -26,45 +30,35 @@ static int	read_file(const char *file_path, t_map *map)
 {
 	int		fd;
 	char	*line;
-	char	*tmp;
-	int i;
+	size_t i;
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
 		return (print_error("read_file: Could not open the file.\n"));
 
-	line = get_next_line(fd);
-	if (!line)
-		return (close(fd), print_error("map file is empty.\n"));
-
 	i = 0;
-	while (i <= map->lines_count)
+	while (i < map->lines_count)
 	{
 		line = get_next_line(fd);
-		tmp = ft_strtrim(line, " \n\t");
+		map->file_data[i] = trim_if_needed(line);
 		free(line);
-		if (!tmp)
-			return (close(fd), free_file_data(map->file_data, i),
-				print_error("normalize failed.\n"));
-		map->file_data[i] = ft_strdup(tmp);
 		if (!map->file_data[i])
 			return (close(fd), free_file_data(map->file_data, i),
-				print_error("string duplication failed.\n"));
+				print_error("read_file: malloc dup or trim failed.\n"));
 		i++;
 	}
-	close(fd);
+	map->file_data[i] = NULL;
+	close(fd);	
 	return (0);
 }
-
 /*
-
 int procces_data_read(t_map *map)
 {
-	t_list *curr;
+	size_t i;
 	int param_check_flag;
 
-	curr = map->file_data;
-	while (curr != NULL)
+	i = 0;
+	while (i)
 	{
 		if (ft_strncmp(curr->content, "NO", 2) || ft_strncmp(curr->content, "SO", 2)
 		|| ft_strncmp(curr->content, "WE", 2) || ft_strncmp(curr->content, "EA", 2) && get_textures_data(map, curr))
@@ -74,7 +68,6 @@ int procces_data_read(t_map *map)
 			param_check_flag++;
 		
 		
-		curr = curr->next;
 	}
 
 	get_map_data(map);

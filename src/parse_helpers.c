@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
 
-int count_lines_in_file(const char *file_path, int *lines_count)
+int count_lines_in_file(const char *file_path, size_t *lines_count)
 {
     int fd;
     int i;
@@ -15,7 +15,7 @@ int count_lines_in_file(const char *file_path, int *lines_count)
 	if (!line)
 		return (close(fd), print_error("count_lines: The file is empty.\n"));
     
-    i = 1;
+    i = 0;
     while(line)
     {
         i++;
@@ -28,9 +28,35 @@ int count_lines_in_file(const char *file_path, int *lines_count)
     return (0);
 }
 
+char *trim_if_needed(char *str)
+{
+    size_t  i;
+
+    if (!str)
+        return (NULL);
+
+    i = 0;
+    while (str[i] == ' ')
+        i++;
+
+    if (str[i] == 'N' || str[i] == 'S'
+        || str[i] == 'W' || str[i] == 'E'
+        || str[i] == 'F' || str[i] == 'C')
+        return (ft_strtrim(str, " \n\t"));
+
+    return (ft_strdup(str));
+}
+
+
+
+		
+
+
+
 void free_file_data(char **file_data, int i)
 {
     (void)file_data;
     (void)i;
 
 }
+

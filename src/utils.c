@@ -14,3 +14,13 @@ void cleanup_game(t_game *game)
 
 
 }
+
+
+
+void free_map(t_map *map)
+{
+    (void)map;
+
+
+
+}
