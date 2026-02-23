@@ -9,11 +9,11 @@ int count_lines_in_file(const char *file_path, size_t *lines_count)
 
     fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		return (print_error("count_lines: Could not open the file.\n"));
+		return (error_errno("count_lines"));
 
     line = get_next_line(fd);
 	if (!line)
-		return (close(fd), print_error("count_lines: The file is empty.\n"));
+		return (close(fd), error_msg("count_lines: The file is empty.\n"));
     
     i = 0;
     while(line)

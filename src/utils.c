@@ -1,11 +1,24 @@
 #include "cub3d.h"
 
-int print_error(char *error_message)
+static void print_error_marker(void)
 {
-  printf("%s", error_message);
-  return (1);
+    write(2, "Error\n", 6);
 }
 
+int error_errno(const char *context)
+{
+    print_error_marker();
+    perror(context);
+    return (1);
+}
+
+int error_msg(const char *error_message)
+{
+    print_error_marker();
+    if (error_message)
+        write(2, error_message, ft_strlen(error_message));
+    return (1);
+}
 
 
 void cleanup_game(t_game *game)

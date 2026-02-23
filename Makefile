@@ -51,7 +51,8 @@ DEBUG_SRCS := \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/parse.c \
 	$(SRC_DIR)/parse_helpers.c \
-	$(SRC_DIR)/utils.c
+	$(SRC_DIR)/utils.c \
+	$(SRC_DIR)/debagging_helpers.c
 
 OBJS       := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS       := $(OBJS:.o=.d)
@@ -69,6 +70,17 @@ all: depscheck_full $(NAME)
 debug: depscheck_libft $(DEBUG_NAME)
 
 bootstrap: deps_full all
+
+# ----------------------------
+# Parser tests (no graphics)
+# ----------------------------
+
+PY := python3
+TEST_RUNNER := tests/run_parser_tests.py
+BIN_DEBUG := ./cub3d_debug
+
+test_parser: tests
+	$(PY) $(TEST_RUNNER)
 
 # =======================
 # Link

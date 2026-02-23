@@ -21,8 +21,13 @@ typedef struct s_map
     int floor_color;
     int ceiling_color;
 
+    const char **grid;
+    size_t map_height;
+    size_t map_width;
 
-
+    size_t  player_x;
+    size_t  player_y;
+    char    player_dir;
 
 } t_map;
 
@@ -57,9 +62,15 @@ void game_loop(t_game *game);
 
 
 // utils.c
-int print_error(char *error_message);
+int error_errno(const char *context);
+int error_msg(const char *error_message);
 void cleanup_game(t_game *game);
 void free_map(t_map *map);
+
+// debagging_helpers.c
+void print_file_data(t_map *map);
+void	debug_dump_parsed(const t_map *map);
+void	print_map_grid(const char **grid, size_t h, size_t w);
 
 
 #endif

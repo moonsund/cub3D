@@ -10,7 +10,7 @@ int initialize_map(const char *file_path, t_map *map)
 
 	map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
 	if (!map->file_data)
-		return (print_error("initialize_map: malloc file data.\n"));
+		return (error_errno("initialize_map"));
 
 	if (!read_file(file_path, map))
 		return (1);
@@ -34,7 +34,7 @@ static int	read_file(const char *file_path, t_map *map)
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		return (print_error("read_file: Could not open the file.\n"));
+		return (error_errno("read_file"));
 
 	i = 0;
 	while (i < map->lines_count)
@@ -44,7 +44,7 @@ static int	read_file(const char *file_path, t_map *map)
 		free(line);
 		if (!map->file_data[i])
 			return (close(fd), free_file_data(map->file_data, i),
-				print_error("read_file: malloc dup or trim failed.\n"));
+				error_errno("read_file"));
 		i++;
 	}
 	map->file_data[i] = NULL;
