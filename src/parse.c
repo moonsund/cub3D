@@ -1,7 +1,11 @@
 #include "cub3d.h"
 
 static int	read_file(const char *file_path, t_map *map);
-int get_textures_data(t_map *map, t_list curr);
+int procces_data_read(t_map *map);
+int get_textures_data(t_map *map, char *str);
+int get_colours_data(t_map *map, char *str);
+static int get_map_data(t_map *map, int i);
+static int parse_colours(char *line);
 
 int initialize_map(const char *file_path, t_map *map)
 {
@@ -15,8 +19,8 @@ int initialize_map(const char *file_path, t_map *map)
 	if (!read_file(file_path, map))
 		return (1);
 
-	// if (!procces_data(map));
-	// 	return (1);
+	if (!procces_data_read(map))
+		return (1);
 
 	// if (!parce_data(map));
 	// 	return (1);
@@ -51,38 +55,62 @@ static int	read_file(const char *file_path, t_map *map)
 	close(fd);	
 	return (0);
 }
-/*
+
 int procces_data_read(t_map *map)
 {
 	size_t i;
 	int param_check_flag;
 
+	param_check_flag = 0;
 	i = 0;
-	while (i)
+	while (map->file_data[i] != NULL)
 	{
-		if (ft_strncmp(curr->content, "NO", 2) || ft_strncmp(curr->content, "SO", 2)
-		|| ft_strncmp(curr->content, "WE", 2) || ft_strncmp(curr->content, "EA", 2) && get_textures_data(map, curr))
+		if ((ft_strncmp(map->file_data[i], "NO", 2) || ft_strncmp(map->file_data[i], "SO", 2)
+		|| ft_strncmp(map->file_data[i], "WE", 2) || ft_strncmp(map->file_data[i], "EA", 2)) && get_textures_data(map, map->file_data[i]))
 			param_check_flag++;
 		
-		else if (ft_strncmp(curr->content, "F", 1) || ft_strncmp(curr->content, "C", 1) && get_colours_data(map, curr))
+		else if ((ft_strncmp(map->file_data[i], "F", 1) 
+		|| ft_strncmp(map->file_data[i], "C", 1)) 
+		&& get_colours_data(map, map->file_data[i]))
 			param_check_flag++;
-		
+		if (param_check_flag == 6)
+			break;
 		
 	}
 
-	get_map_data(map);
+	get_map_data(map, i);
+	return (0);
 }	
 
 
-static int parse_map(line)
+static int get_map_data(t_map *map, int i)
 {
-	(void)line;
+	(void)map;
+	(void)i;
 
 	return (0);
 
 }
 
-static int parse_colours(line)
+
+int get_textures_data(t_map *map, char *str)
+{
+	(void)map;
+	(void)str;
+	return (0);
+}
+
+int get_colours_data(t_map *map, char *str)
+{
+	(void)map;
+	(void)str;
+	parse_colours(str);
+
+	return (0);
+}
+
+
+static int parse_colours(char *line)
 {
 	(void)line;
 	// int color = (r << 16) | (g << 8) | b;
@@ -96,19 +124,3 @@ static int parse_colours(line)
 	return (0);
 
 }
-
-static int parse_walls(line)
-{
-	(void)line;
-	return (0);
-
-}
-
-int get_textures_data(t_map *map, t_list curr)
-{
-
-
-
-}
-
-*/
