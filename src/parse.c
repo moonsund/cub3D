@@ -1,25 +1,26 @@
 #include "cub3d.h"
 
 static int	read_file(const char *file_path, t_map *map);
-int procces_data_read(t_map *map);
-int get_textures_data(t_map *map, char *str);
-int get_colours_data(t_map *map, char *str);
+static int procces_data_read(t_map *map);
+static int get_textures_data(t_map *map, char *str);
+static int get_colours_data(t_map *map, char *str);
 static int get_map_data(t_map *map, int i);
-static int parse_colours(char *line);
 
-int initialize_map(const char *file_path, t_map *map)
+int fill_map(const char *file_path, t_map *map)
 {
+	initialize_map(map);
+
 	if (count_lines_in_file(file_path, &map->lines_count))
 		return (1);
-
+	
 	map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
 	if (!map->file_data)
 		return (error_errno("initialize_map"));
-
-	if (!read_file(file_path, map))
+	
+	if (read_file(file_path, map))
 		return (1);
 
-	if (!procces_data_read(map))
+	if (procces_data_read(map))
 		return (1);
 
 	// if (!parce_data(map));
@@ -39,7 +40,6 @@ static int	read_file(const char *file_path, t_map *map)
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
 		return (error_errno("read_file"));
-
 	i = 0;
 	while (i < map->lines_count)
 	{
@@ -52,75 +52,116 @@ static int	read_file(const char *file_path, t_map *map)
 		i++;
 	}
 	map->file_data[i] = NULL;
-	close(fd);	
+	close(fd);
 	return (0);
 }
 
-int procces_data_read(t_map *map)
+static int procces_data_read(t_map *map)
 {
-	size_t i;
-	int param_check_flag;
+    size_t  i;
+    int     params;
+    char    *line;
 
-	param_check_flag = 0;
-	i = 0;
-	while (map->file_data[i] != NULL)
-	{
-		if ((ft_strncmp(map->file_data[i], "NO", 2) || ft_strncmp(map->file_data[i], "SO", 2)
-		|| ft_strncmp(map->file_data[i], "WE", 2) || ft_strncmp(map->file_data[i], "EA", 2)) && get_textures_data(map, map->file_data[i]))
-			param_check_flag++;
-		
-		else if ((ft_strncmp(map->file_data[i], "F", 1) 
-		|| ft_strncmp(map->file_data[i], "C", 1)) 
-		&& get_colours_data(map, map->file_data[i]))
-			param_check_flag++;
-		if (param_check_flag == 6)
-			break;
-		
-	}
+    i = 0;
+    params = 0;
+    while (map->file_data[i] && params < 6)
+    {
+        line = map->file_data[i];
 
-	get_map_data(map, i);
-	return (0);
-}	
+        if (line[0] == '\n' || line[0] == '\0')
+        {
+            i++;
+            continue;
+        }
+
+        if (is_texture_identifier(line))
+        {
+            if (get_textures_data(map, line) != 0)
+                return (1);
+            params++;
+        }
+        else if (is_color_identifier(line))
+        {
+            if (get_colours_data(map, line) != 0)
+                return (1);
+            params++;
+        }
+        else
+            return (error_exit_msg("procces_data_read: data corrupted"));
+        i++;
+    }
+
+    if (params < 6)
+        return (error_exit_msg("procces_data_read: missing data"));
+
+    get_map_data(map, i);
+    return (0);
+}
+
+static int get_textures_data(t_map *map, char *str)
+{
+    char **tmp;
+    int  return_code;
+
+    tmp = ft_split(str, ' ');
+    if (!tmp)
+        return (error_errno("get_textures_data: split"));
+
+    if (!tmp[0] || !tmp[1] || tmp[2])
+    {
+        free_split(tmp);
+        return (error_exit_msg("invalid texture line format"));
+    }
+
+    return_code = 0;
+    if (ft_strncmp(tmp[0], "NO", 3) == 0)
+        return_code = set_texture(&map->tex_N, tmp[1]);
+    else if (ft_strncmp(tmp[0], "SO", 3) == 0)
+        return_code = set_texture(&map->tex_S, tmp[1]);
+    else if (ft_strncmp(tmp[0], "EA", 3) == 0)
+        return_code = set_texture(&map->tex_E, tmp[1]);
+    else if (ft_strncmp(tmp[0], "WE", 3) == 0)
+        return_code = set_texture(&map->tex_W, tmp[1]);
+    else
+        return_code = error_exit_msg("unknown texture id");
+
+    free_split(tmp);
+    return (return_code);
+}
+
+static int get_colours_data(t_map *map, char *str)
+{
+	char **tmp;
+    int  return_code;
+
+    tmp = ft_split(str, ' ');
+    if (!tmp)
+        return (error_errno("get_colours_data: split"));
+
+    if (!tmp[0] || !tmp[1] || tmp[2])
+    {
+        free_split(tmp);
+        return (error_exit_msg("invalid colour line format"));
+    }
+	
+	return_code = 0;
+	if (tmp[0][0] == 'F' && tmp[0][1] == '\0')
+        return_code = set_colours(tmp[1],  &map->floor_color);
+    else if (tmp[0][0] == 'C' && tmp[0][1] == '\0')
+        return_code = set_colours(tmp[1], &map->ceiling_color);
+    else
+        return_code = error_exit_msg("unknown colour id");
+
+    free_split(tmp);
+    return (return_code);
+}
 
 
-static int get_map_data(t_map *map, int i)
+static int get_map_data(t_map *map, int start_index)
 {
 	(void)map;
-	(void)i;
+	(void)start_index;
 
-	return (0);
-
-}
-
-
-int get_textures_data(t_map *map, char *str)
-{
-	(void)map;
-	(void)str;
-	return (0);
-}
-
-int get_colours_data(t_map *map, char *str)
-{
-	(void)map;
-	(void)str;
-	parse_colours(str);
-
-	return (0);
-}
-
-
-static int parse_colours(char *line)
-{
-	(void)line;
-	// int color = (r << 16) | (g << 8) | b;
-
-	// распарсить строку
-	// проверить:
-	// 3 числа
-	// только цифры
-	// диапазон 0–255
-	// сохранить как int color
 	return (0);
 
 }

@@ -1,9 +1,6 @@
 #include "cub3d.h"
 
-static void print_error_marker(void)
-{
-    write(2, "Error\n", 6);
-}
+static void print_error_marker(void);
 
 int error_errno(const char *context)
 {
@@ -12,7 +9,7 @@ int error_errno(const char *context)
     return (1);
 }
 
-int error_msg(const char *error_message)
+int error_exit_msg(const char *error_message)
 {
     print_error_marker();
     if (error_message)
@@ -36,4 +33,9 @@ void free_map(t_map *map)
 
 
 
+}
+
+static void print_error_marker(void)
+{
+    write(2, "Error\n", 6);
 }

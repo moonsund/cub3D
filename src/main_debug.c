@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     if (validate_arguments(argc, argv))
         return (EXIT_FAILURE);
 
-    if (!initialize_map(argv[1], &map))
+    if (fill_map(argv[1], &map))
         return (EXIT_FAILURE); 
 
     debug_dump_parsed(&map);

@@ -11,9 +11,9 @@
 
 typedef struct s_map
 {
-    char **file_data;
     size_t lines_count;
-
+    char **file_data;
+    
     char *tex_N;
     char *tex_S;
     char *tex_E;
@@ -46,12 +46,19 @@ int validate_arguments(int argc, char **argv);
 
 
 // parse.c
-int initialize_map(const char *file_path, t_map *map);
+int fill_map(const char *file_path, t_map *map);
 
 // parse_helpers.c
+void initialize_map(t_map *map);
 int count_lines_in_file(const char *file_path, size_t *lines_count);
-void free_file_data(char **file_data, int i);
 char *trim_if_needed(char *str);
+int set_texture(char **target, char *str);
+void free_split(char **arr);
+int is_texture_identifier(char *str);
+int is_color_identifier(char *str);
+void free_file_data(char **file_data, int i);
+int set_colours(const char *str, int *dst);
+int validate_colour_args(char **arr);
 
 // init.c
 int initialize_game(t_game *game, char *map);
@@ -63,7 +70,7 @@ void game_loop(t_game *game);
 
 // utils.c
 int error_errno(const char *context);
-int error_msg(const char *error_message);
+int error_exit_msg(const char *error_message);
 void cleanup_game(t_game *game);
 void free_map(t_map *map);
 
