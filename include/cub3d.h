@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
-
+#include <stdbool.h>
 
 typedef struct s_map
 {
@@ -53,11 +53,12 @@ void initialize_map(t_map *map);
 int count_lines_in_file(const char *file_path, size_t *lines_count);
 char *trim_if_needed(char *str);
 int set_texture(char **target, char *str);
+int validate_texture_arg(char *path);
 void free_split(char **arr);
-int is_texture_identifier(char *str);
-int is_color_identifier(char *str);
+bool is_texture_identifier(char *str);
+bool is_color_identifier(char *str);
 void free_file_data(char **file_data, int i);
-int set_colours(const char *str, int *dst);
+int set_colour(const char *str, int *dst);
 int validate_colour_args(char **arr);
 
 // init.c

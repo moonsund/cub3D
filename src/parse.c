@@ -2,29 +2,26 @@
 
 static int	read_file(const char *file_path, t_map *map);
 static int procces_data_read(t_map *map);
-static int get_textures_data(t_map *map, char *str);
-static int get_colours_data(t_map *map, char *str);
+static int parse_texture_line(t_map *map, char *str);
+static int parse_colour_line(t_map *map, char *str);
 static int get_map_data(t_map *map, int i);
 
 int fill_map(const char *file_path, t_map *map)
 {
 	initialize_map(map);
 
-	if (count_lines_in_file(file_path, &map->lines_count))
+	if (count_lines_in_file(file_path, &map->lines_count) != 0)
 		return (1);
 	
 	map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
 	if (!map->file_data)
-		return (error_errno("initialize_map"));
+		return (error_errno("fill_map"));
 	
-	if (read_file(file_path, map))
+	if (read_file(file_path, map) != 0)
 		return (1);
 
-	if (procces_data_read(map))
+	if (procces_data_read(map) != 0)
 		return (1);
-
-	// if (!parce_data(map));
-	// 	return (1);
 
 	// if (!validate_data(map));
 	// 	return (1);
@@ -76,13 +73,13 @@ static int procces_data_read(t_map *map)
 
         if (is_texture_identifier(line))
         {
-            if (get_textures_data(map, line) != 0)
+            if (parse_texture_line(map, line) != 0)
                 return (1);
             params++;
         }
         else if (is_color_identifier(line))
         {
-            if (get_colours_data(map, line) != 0)
+            if (parse_colour_line(map, line) != 0)
                 return (1);
             params++;
         }
@@ -98,14 +95,14 @@ static int procces_data_read(t_map *map)
     return (0);
 }
 
-static int get_textures_data(t_map *map, char *str)
+static int parse_texture_line(t_map *map, char *str)
 {
     char **tmp;
     int  return_code;
 
     tmp = ft_split(str, ' ');
     if (!tmp)
-        return (error_errno("get_textures_data: split"));
+        return (error_errno("parse_texture_line: split"));
 
     if (!tmp[0] || !tmp[1] || tmp[2])
     {
@@ -129,7 +126,7 @@ static int get_textures_data(t_map *map, char *str)
     return (return_code);
 }
 
-static int get_colours_data(t_map *map, char *str)
+static int parse_colour_line(t_map *map, char *str)
 {
 	char **tmp;
     int  return_code;
@@ -146,9 +143,9 @@ static int get_colours_data(t_map *map, char *str)
 	
 	return_code = 0;
 	if (tmp[0][0] == 'F' && tmp[0][1] == '\0')
-        return_code = set_colours(tmp[1],  &map->floor_color);
+        return_code = set_colour(tmp[1],  &map->floor_color);
     else if (tmp[0][0] == 'C' && tmp[0][1] == '\0')
-        return_code = set_colours(tmp[1], &map->ceiling_color);
+        return_code = set_colour(tmp[1], &map->ceiling_color);
     else
         return_code = error_exit_msg("unknown colour id");
 

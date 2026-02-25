@@ -4,11 +4,12 @@ void initialize_map(t_map *map);
 int count_lines_in_file(const char *file_path, size_t *lines_count);
 char *trim_if_needed(char *str);
 int set_texture(char **target, char *str);
+int validate_texture_arg(char *path);
 void free_split(char **arr);
-int is_texture_identifier(char *str);
-int is_color_identifier(char *str);
+bool is_texture_identifier(char *str);
+bool is_color_identifier(char *str);
 void free_file_data(char **file_data, int i);
-int set_colours(const char *str, int *dst);
+int set_colour(const char *str, int *dst);
 int validate_colour_args(char **arr);
 
 void initialize_map(t_map *map)
@@ -25,8 +26,8 @@ void initialize_map(t_map *map)
     map->map_height = 0;
     map->map_width = 0;
     map->player_dir = ' ';
-    map->player_x = 0;
-    map->player_y = 0;
+    map->player_x = -1;
+    map->player_y = -1;
 }
 
 int count_lines_in_file(const char *file_path, size_t *lines_count)
@@ -78,10 +79,35 @@ char *trim_if_needed(char *str)
 int set_texture(char **dst, char *str)
 {
     if (*dst != NULL)
-        return (error_exit_msg("set_texture: duplicated texture id"));
+        return (error_exit_msg("set_texture: duplicated texture id\n"));
+    if (validate_texture_arg(str))
+        return (1);
+    
+    
     *dst = ft_strdup(str);
     if (*dst == NULL)
         return (error_errno("set_texture"));
+    return (0);
+}
+
+int validate_texture_arg(char *path)
+{
+    int fd;
+    int path_len;
+  
+    path_len =  ft_strlen(path);
+
+    if (path_len < 5)
+        return (error_exit_msg("validate_texture_arg: invalid file path\n"));
+
+    if (ft_strncmp(&path[path_len - 4], ".xpm", 4) != 0)
+        return (error_exit_msg("validate_texture_arg: invalid file extension\n"));
+
+    fd = open(path, O_RDONLY);
+    if (fd == -1)
+        return (error_errno("validate_texture_arg"));
+    close(fd);
+
     return (0);
 }
 
@@ -97,7 +123,7 @@ void free_split(char **arr)
     free(arr);
 }
 
-int is_texture_identifier(char *str)
+bool is_texture_identifier(char *str)
 {
 	return (!ft_strncmp(str, "NO", 2) || 
 			!ft_strncmp(str, "SO", 2) ||
@@ -105,7 +131,7 @@ int is_texture_identifier(char *str)
 			!ft_strncmp(str, "EA", 2));
 }
 
-int is_color_identifier(char *str)
+bool is_color_identifier(char *str)
 {
 	return (!ft_strncmp(str, "F", 1) || 
 			!ft_strncmp(str, "C", 1));
@@ -115,10 +141,9 @@ void free_file_data(char **file_data, int i)
 {
     (void)file_data;
     (void)i;
-
 }
 
-int set_colours(const char *str, int *dst)
+int set_colour(const char *str, int *dst)
 {
     char **tmp;
 
@@ -139,7 +164,6 @@ int set_colours(const char *str, int *dst)
     free_split(tmp);
 	return (0);
 }
-
 
 int validate_colour_args(char **arr)
 {
