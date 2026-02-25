@@ -2,11 +2,17 @@
 
 int main(int argc, char **argv)
 {
+    t_map map;
     t_game game;
 
     if (validate_arguments(argc, argv))
         return (EXIT_FAILURE);
 
+    // if (!parse_file(argv[1], &map))
+    //     return (EXIT_FAILURE);
+
+    if (!initialize_map(argv[1], &map))
+        return (EXIT_FAILURE); 
 
     // Initialize game state and load the map
     if (!initialize_game(&game, argv[1]))
