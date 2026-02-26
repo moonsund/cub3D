@@ -75,7 +75,7 @@ int error_exit_msg(const char *error_message);
 void cleanup_game(t_game *game);
 void free_map(t_map *map);
 
-// debagging_helpers.c
+// debugging_helpers.c
 void print_file_data(t_map *map);
 void	debug_dump_parsed(const t_map *map);
 void	print_map_grid(const char **grid, size_t h, size_t w);

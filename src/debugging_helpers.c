@@ -22,23 +22,26 @@ void	debug_dump_parsed(const t_map *map)
 	printf("MAP_W=%zu\n", map->map_width);
 	printf("MAP_H=%zu\n", map->map_height);
 	printf("MAP:\n");
-	// print_map_grid((const char **)map->grid, map->map_height, map->map_width);
+	print_map_grid((const char **)map->grid, map->map_height, map->map_width);
 }
 
-void	print_map_grid(const char **grid, size_t h, size_t w)
+void	print_map_grid(const char **grid, size_t height, size_t width)
 {
 	size_t	y;
 	size_t	x;
 
 	y = 0;
-	while (y < h)
+	while (y < height)
 	{
+		printf("grid[%zu]=", y);
+		putchar('"');
 		x = 0;
-		while (x < w)
+		while (x < width)
 		{
 			putchar(grid[y][x]);
 			x++;
 		}
+		putchar('"');
 		putchar('\n');
 		y++;
 	}
