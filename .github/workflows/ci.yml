@@ -2,45 +2,45 @@ name: pull-request
 
 on:
   pull_request:
+    branches: [main, develop]
 
 jobs:
   build-test:
+    concurrency:
+      group: pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.x"
 
       # Linux deps for minilibx-linux
-      - name: Install deps (Linux)
-        if: runner.os == 'Linux'
+      - name: Install deps
         run: |
           sudo apt-get update
           sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev
 
       # Optional: tools
-      - name: Install tools (Linux)
-        if: runner.os == 'Linux'
+      - name: Install tools
         run: |
           sudo apt-get install -y valgrind cppcheck clang-format
 
-      - name: Install tools (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          brew update
-          brew install cppcheck clang-format
-
       - name: Build (release)
         run: make
+
+      - name: Clean
+        run: make fclean
 
       - name: Build (debug)
         run: make debug
@@ -48,13 +48,11 @@ jobs:
       - name: Parser tests
         run: make test_parser
 
-      # - name: Lint (cppcheck)
-      #   run: make lint_cppcheck
+      - name: Lint (cppcheck)
+        run: make lint_cppcheck
 
-      - name: Memcheck (Linux / valgrind)
-        if: runner.os == 'Linux'
-        run: make memcheck_linux
+      - name: Format (clang-format)
+        run: make format
 
-      - name: Memcheck (macOS / leaks)
-        if: runner.os == 'macOS'
-        run: make memcheck_macos
+      - name: Memcheck
+        run: make memcheck

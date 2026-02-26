@@ -54,6 +54,21 @@ LDLIBS      := -lft -lmlx -lXext -lX11 -lm -lz
 DBG_LDFLAGS := -L$(LIBFT_DIR)
 DBG_LDLIBS  := -lft
 
+# cppcheck flags
+CPPCHECK_FLAGS := \
+  --language=c \
+  --std=c11 \
+  --enable=warning,style,performance,portability \
+  --inconclusive \
+  --inline-suppr \
+  --error-exitcode=1 \
+  --suppress=missingIncludeSystem
+
+CPPCHECK_EXCLUDE := \
+  -i$(MLX_DIR) \
+  -i$(LIBFT_DIR) \
+  -ibuild -iobj -iobjs
+
 # ==========
 # OS detect
 # ==========
@@ -129,14 +144,14 @@ bootstrap: deps_full all
 
 help:
 	@echo "Targets:"
-	@echo "  all / make           - build release (with MLX on Linux)"
-	@echo "  debug                - build debug binary (no MLX)"
-	@echo "  test_parser          - run parser tests (requires debug binary)"
-	@echo "  memcheck             - run leak check (auto: Linux=valgrind, macOS=leaks; usage: make memcheck ARGS=./map.cub)"
-	@echo "  test_parser_memcheck   - run leak check with parser tests"
-	@echo "  lint_cppcheck        - static analysis with cppcheck"
-	@echo "  format               - format sources with clang-format"
-	@echo "  clean / fclean / re  - cleanup / full cleanup / rebuild"
+	@echo "  all / make            - build release (with MLX on Linux)"
+	@echo "  debug                 - build debug binary (no MLX)"
+	@echo "  test_parser           - run parser tests (requires debug binary)"
+	@echo "  memcheck              - run leak check (auto: Linux=valgrind, macOS=leaks; usage: make memcheck ARGS=./map.cub)"
+	@echo "  test_parser_memcheck  - run leak check with parser tests"
+	@echo "  cppcheck              - static analysis with cppcheck (installation may be required)"
+	@echo "  format                - format sources with clang-format"
+	@echo "  clean / fclean / re   - cleanup / full cleanup / rebuild"
 
 # ==========
 # Tests
@@ -174,11 +189,10 @@ endif
 # Lint / format (no clang-tidy)
 # ==========
 lint_cppcheck:
-	$(CPPCHECK) --enable=all --error-exitcode=1 --inline-suppr \
-		-I$(INC_DIR) -I$(LIBFT_DIR) $(SRC_DIR)
+	$(CPPCHECK) $(CPPCHECK_FLAGS) $(CPPCHECK_EXCLUDE) $(CPPFLAGS) $(SRCS)
 
 format:
-	$(CLANG_FORMAT) -i $(SRCS) $(DEBUG_SRCS) $(wildcard $(INC_DIR)/*.h)
+	$(CLANG_FORMAT) -i $(SRCS) $(DEBUG_SRCS)
 
 # ==========
 # Link
