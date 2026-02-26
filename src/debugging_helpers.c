@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-void print_file_data(t_map* map)
+void print_file_data(t_map *map)
 {
     size_t i = 0;
     while (i < map->lines_count)
@@ -10,7 +10,7 @@ void print_file_data(t_map* map)
     }
 }
 
-void debug_dump_parsed(const t_map* map)
+void debug_dump_parsed(const t_map *map)
 {
     printf("NO=%s\n", map->tex_N);
     printf("SO=%s\n", map->tex_S);
@@ -23,10 +23,10 @@ void debug_dump_parsed(const t_map* map)
     printf("MAP_W=%zu\n", map->map_width);
     printf("MAP_H=%zu\n", map->map_height);
     printf("MAP:\n");
-    print_map_grid((const char**)map->grid, map->map_height, map->map_width);
+    print_map_grid((const char **)map->grid, map->map_height, map->map_width);
 }
 
-void print_map_grid(const char** grid, size_t height, size_t width)
+void print_map_grid(const char **grid, size_t height, size_t width)
 {
     size_t y;
     size_t x;

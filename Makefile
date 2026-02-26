@@ -1,4 +1,4 @@
-# ***************************************************** #
+# ===================================================== #
 #              cub3d Makefile usage                     #
 #  - help info             help                         #
 #  - release build:        make / make all              #
@@ -8,8 +8,7 @@
 #  - memcheck & tests:     make test_parser_memcheck    #
 #  - lint (cppcheck):      make lint_cppcheck           #
 #  - format:               make format                  #
-# ***************************************************** #
-
+# ===================================================== #
 
 
 NAME        := cub3d
@@ -85,7 +84,6 @@ LEAKS       	?= leaks
 CPPCHECK    	?= cppcheck
 CLANG_FORMAT	?= clang-format
 
-# Args for running your program in tests/memcheck
 # Usage: make memcheck ARGS="maps/map.cub"
 ARGS ?=
 
@@ -93,11 +91,8 @@ ARGS ?=
 VALGRIND_OPTS ?= --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=42
 
 # leaks options (macOS)
-# Tip: MallocStackLogging=1 improves leak stack traces (slower).
 LEAKS_ENV  ?= MallocStackLogging=1
 LEAKS_OPTS ?= --atExit --
-
-
 
 # =======================
 # Sources
@@ -132,9 +127,9 @@ DEBUG_DEPS := $(DEBUG_OBJS:.o=.d)
 .PHONY: all debug bootstrap deps_libft deps_full depscheck \
         depscheck_libft clean fclean re distclean format help
 
-# ==========
+# =======================
 # Main targets
-# ==========
+# =======================
 .DEFAULT_GOAL := all
 
 all: depscheck_full $(NAME)
@@ -149,19 +144,19 @@ help:
 	@echo "  test_parser           - run parser tests (requires debug binary)"
 	@echo "  memcheck              - run leak check (auto: Linux=valgrind, macOS=leaks; usage: make memcheck ARGS=./map.cub)"
 	@echo "  test_parser_memcheck  - run leak check with parser tests"
-	@echo "  cppcheck              - static analysis with cppcheck (installation may be required)"
-	@echo "  format                - format sources with clang-format"
+	@echo "  lint_cppcheck         - static analysis with cppcheck (installation may be required)"
+	@echo "  format                - format sources with clang-format (installation may be required)"
 	@echo "  clean / fclean / re   - cleanup / full cleanup / rebuild"
 
-# ==========
+# =======================
 # Tests
-# ==========
+# =======================
 test_parser: $(DEBUG_NAME)
 	BIN=./$(DEBUG_NAME) $(PY) $(TEST_RUNNER)
 
-# ==========
+# =======================
 # Memcheck light (auto per OS)
-# ==========
+# =======================
 memcheck: $(DEBUG_NAME)
 ifeq ($(UNAME_S),Linux)
 	$(VALGRIND) $(VALGRIND_OPTS) ./$(DEBUG_NAME) $(ARGS)
@@ -172,9 +167,9 @@ else
 	@exit 1
 endif
 
-# ==========
+# =======================
 # Memcheck with maps parsing (auto per OS)
-# ==========
+# =======================
 test_parser_memcheck: $(DEBUG_NAME)
 ifeq ($(UNAME_S),Linux)
 	RUN_PREFIX='$(VALGRIND) $(VALGRIND_OPTS)' BIN=./$(DEBUG_NAME) $(PY) $(TEST_RUNNER)
@@ -185,27 +180,27 @@ else
 	@exit 1
 endif
 
-# ==========
+# =======================
 # Lint / format (no clang-tidy)
-# ==========
+# =======================
 lint_cppcheck:
 	$(CPPCHECK) $(CPPCHECK_FLAGS) $(CPPCHECK_EXCLUDE) $(CPPFLAGS) $(SRCS)
 
 format:
 	$(CLANG_FORMAT) -i $(SRCS) $(DEBUG_SRCS)
 
-# ==========
+# =======================
 # Link
-# ==========
+# =======================
 $(NAME): $(OBJS) $(LIBFT_A) $(MLX_A)
 	$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
 
 $(DEBUG_NAME): $(DEBUG_OBJS) $(LIBFT_A)
 	$(CC) $(DEBUG_OBJS) $(DBG_LDFLAGS) $(DBG_LDLIBS) -o $@
 
-# ==========
+# =======================
 # Compile + auto deps
-# ==========
+# =======================
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(MKDIR_P) $(dir $@)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -MMD -MP -c $< -o $@
@@ -217,9 +212,9 @@ $(DBG_OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 -include $(DEPS)
 -include $(DEBUG_DEPS)
 
-# ==========
+# =======================
 # deps: submodules
-# ==========
+# =======================
 deps_libft:
 	@$(MKDIR_P) $(LIBS_DIR)
 	@echo ">> Updating libft submodule"
@@ -230,9 +225,9 @@ deps_full:
 	@echo ">> Updating all submodules"
 	@git submodule update --init --recursive
 
-# ==========
+# =======================
 # depscheck (split!)
-# ==========
+# =======================
 depscheck_libft:
 	@$(MKDIR_P) $(LIBS_DIR)
 	@if [ ! -f ".gitmodules" ]; then \
@@ -255,9 +250,9 @@ depscheck_full:
 		exit 1; \
 	fi
 
-# ==========
+# =======================
 # Build libs
-# ==========
+# =======================
 $(LIBFT_A): depscheck_libft
 	$(MAKE) -C $(LIBFT_DIR)
 
@@ -268,9 +263,9 @@ $(MLX_A): depscheck_full
 	fi
 	$(MAKE) -C $(MLX_DIR)
 
-# ==========
+# =======================
 # Cleaning
-# ==========
+# =======================
 clean:
 	$(RMR) $(OBJ_DIR) $(DBG_OBJ_DIR)
 	@if [ -f "$(LIBFT_DIR)/Makefile" ]; then \

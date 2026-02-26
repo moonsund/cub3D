@@ -1,18 +1,18 @@
 #include "cub3d.h"
 
-void initialize_map(t_map* map);
-int count_lines_in_file(const char* file_path, size_t* lines_count);
-char* trim_if_needed(char* str);
-int set_texture(char** target, char* str);
-int validate_texture_arg(char* path);
-void free_split(char** arr);
-bool is_texture_identifier(char* str);
-bool is_color_identifier(char* str);
-void free_file_data(char** file_data, int i);
-int set_colour(const char* str, int* dst);
-int validate_colour_args(char** arr);
+void initialize_map(t_map *map);
+int count_lines_in_file(const char *file_path, size_t *lines_count);
+char *trim_if_needed(char *str);
+int set_texture(char **target, char *str);
+int validate_texture_arg(char *path);
+void free_split(char **arr);
+bool is_texture_identifier(char *str);
+bool is_color_identifier(char *str);
+void free_file_data(char **file_data, int i);
+int set_colour(const char *str, int *dst);
+int validate_colour_args(char **arr);
 
-void initialize_map(t_map* map)
+void initialize_map(t_map *map)
 {
     map->lines_count = 0;
     map->file_data = NULL;
@@ -30,11 +30,11 @@ void initialize_map(t_map* map)
     map->player_y = -1;
 }
 
-int count_lines_in_file(const char* file_path, size_t* lines_count)
+int count_lines_in_file(const char *file_path, size_t *lines_count)
 {
     int fd;
     int i;
-    char* line;
+    char *line;
 
     fd = open(file_path, O_RDONLY);
     if (fd == -1)
@@ -57,7 +57,7 @@ int count_lines_in_file(const char* file_path, size_t* lines_count)
     return (0);
 }
 
-char* trim_if_needed(char* str)
+char *trim_if_needed(char *str)
 {
     size_t i;
 
@@ -75,7 +75,7 @@ char* trim_if_needed(char* str)
     return (ft_strdup(str));
 }
 
-int set_texture(char** dst, char* str)
+int set_texture(char **dst, char *str)
 {
     if (*dst != NULL)
         return (error_exit_msg("set_texture: duplicated texture id\n"));
@@ -88,7 +88,7 @@ int set_texture(char** dst, char* str)
     return (0);
 }
 
-int validate_texture_arg(char* path)
+int validate_texture_arg(char *path)
 {
     int fd;
     int path_len;
@@ -110,7 +110,7 @@ int validate_texture_arg(char* path)
     return (0);
 }
 
-void free_split(char** arr)
+void free_split(char **arr)
 {
     size_t i;
 
@@ -122,26 +122,26 @@ void free_split(char** arr)
     free(arr);
 }
 
-bool is_texture_identifier(char* str)
+bool is_texture_identifier(char *str)
 {
     return (!ft_strncmp(str, "NO", 2) || !ft_strncmp(str, "SO", 2) ||
             !ft_strncmp(str, "WE", 2) || !ft_strncmp(str, "EA", 2));
 }
 
-bool is_color_identifier(char* str)
+bool is_color_identifier(char *str)
 {
     return (!ft_strncmp(str, "F", 1) || !ft_strncmp(str, "C", 1));
 }
 
-void free_file_data(char** file_data, int i)
+void free_file_data(char **file_data, int i)
 {
     (void)file_data;
     (void)i;
 }
 
-int set_colour(const char* str, int* dst)
+int set_colour(const char *str, int *dst)
 {
-    char** tmp;
+    char **tmp;
 
     if (*dst != -1)
         return (error_exit_msg("set_colours: duplicated colour id"));
@@ -161,7 +161,7 @@ int set_colour(const char* str, int* dst)
     return (0);
 }
 
-int validate_colour_args(char** arr)
+int validate_colour_args(char **arr)
 {
     int i;
     int j;

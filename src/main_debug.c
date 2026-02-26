@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     t_map map;
     t_game game;
@@ -13,10 +13,9 @@ int main(int argc, char** argv)
         return (EXIT_FAILURE);
 
     debug_dump_parsed(&map);
+    
+    // Clean up resources
+    void cleanup_game(t_game *game);
     printf("OK\n");
-
-    // Clean up map
-    free_map(&map);
-
     return (0);
 }

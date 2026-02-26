@@ -11,7 +11,7 @@ BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
 
-PointerAlignment: Left
+PointerAlignment: Right
 
 SortIncludes: false
 

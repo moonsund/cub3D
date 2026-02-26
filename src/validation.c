@@ -1,8 +1,8 @@
 #include "cub3d.h"
 
-static bool has_cub_extension(char* filename);
+static bool has_cub_extension(char *filename);
 
-int validate_arguments(int argc, char** argv)
+int validate_arguments(int argc, char **argv)
 {
     int fd;
 
@@ -20,7 +20,7 @@ int validate_arguments(int argc, char** argv)
     return (0);
 }
 
-static bool has_cub_extension(char* filename)
+static bool has_cub_extension(char *filename)
 {
     int filename_len;
 

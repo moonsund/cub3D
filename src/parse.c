@@ -1,19 +1,19 @@
 #include "cub3d.h"
 
-static int read_file(const char* file_path, t_map* map);
-static int procces_data_read(t_map* map);
-static int parse_texture_line(t_map* map, char* str);
-static int parse_colour_line(t_map* map, char* str);
-static int get_map_data(t_map* map, int i);
+static int read_file(const char *file_path, t_map *map);
+static int procces_data_read(t_map *map);
+static int parse_texture_line(t_map *map, char *str);
+static int parse_colour_line(t_map *map, char *str);
+static int get_map_data(t_map *map, int i);
 
-int fill_map(const char* file_path, t_map* map)
+int fill_map(const char *file_path, t_map *map)
 {
     initialize_map(map);
 
     if (count_lines_in_file(file_path, &map->lines_count) != 0)
         return (1);
 
-    map->file_data = malloc(sizeof(char*) * (map->lines_count + 1));
+    map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
     if (!map->file_data)
         return (error_errno("fill_map"));
 
@@ -28,10 +28,10 @@ int fill_map(const char* file_path, t_map* map)
     return (0);
 }
 
-static int read_file(const char* file_path, t_map* map)
+static int read_file(const char *file_path, t_map *map)
 {
     int fd;
-    char* line;
+    char *line;
     size_t i;
 
     fd = open(file_path, O_RDONLY);
@@ -53,11 +53,11 @@ static int read_file(const char* file_path, t_map* map)
     return (0);
 }
 
-static int procces_data_read(t_map* map)
+static int procces_data_read(t_map *map)
 {
     size_t i;
     int params;
-    char* line;
+    char *line;
 
     i = 0;
     params = 0;
@@ -95,9 +95,9 @@ static int procces_data_read(t_map* map)
     return (0);
 }
 
-static int parse_texture_line(t_map* map, char* str)
+static int parse_texture_line(t_map *map, char *str)
 {
-    char** tmp;
+    char **tmp;
     int return_code;
 
     tmp = ft_split(str, ' ');
@@ -126,9 +126,9 @@ static int parse_texture_line(t_map* map, char* str)
     return (return_code);
 }
 
-static int parse_colour_line(t_map* map, char* str)
+static int parse_colour_line(t_map *map, char *str)
 {
-    char** tmp;
+    char **tmp;
     int return_code;
 
     tmp = ft_split(str, ' ');
@@ -153,7 +153,7 @@ static int parse_colour_line(t_map* map, char* str)
     return (return_code);
 }
 
-static int get_map_data(t_map* map, int start_index)
+static int get_map_data(t_map *map, int start_index)
 {
     (void)map;
     (void)start_index;
