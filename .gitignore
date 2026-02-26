@@ -1,9 +1,6 @@
 # Ignore examples folder
 /examples/
 
-# Ignore tests folder
-/tests/
-
 # Ignore IDE configuration folders
 .vscode/
 .DS_Store
@@ -18,6 +15,7 @@
 
 # Ignore the project executable (root binary only)
 /cub3d
+/cub3d_debug
 
 # Ignore Docker files
 Dockerfile

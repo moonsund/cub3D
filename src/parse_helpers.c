@@ -37,15 +37,15 @@ int count_lines_in_file(const char *file_path, size_t *lines_count)
     char *line;
 
     fd = open(file_path, O_RDONLY);
-	if (fd == -1)
-		return (error_errno("count_lines"));
+    if (fd == -1)
+        return (error_errno("count_lines"));
 
     line = get_next_line(fd);
-	if (!line)
-		return (close(fd), error_exit_msg("count_lines: The file is empty.\n"));
-    
+    if (!line)
+        return (close(fd), error_exit_msg("count_lines: The file is empty.\n"));
+
     i = 0;
-    while(line)
+    while (line)
     {
         i++;
         free(line);
@@ -59,7 +59,7 @@ int count_lines_in_file(const char *file_path, size_t *lines_count)
 
 char *trim_if_needed(char *str)
 {
-    size_t  i;
+    size_t i;
 
     if (!str)
         return (NULL);
@@ -68,9 +68,8 @@ char *trim_if_needed(char *str)
     while (str[i] == ' ')
         i++;
 
-    if (str[i] == 'N' || str[i] == 'S'
-        || str[i] == 'W' || str[i] == 'E'
-        || str[i] == 'F' || str[i] == 'C')
+    if (str[i] == 'N' || str[i] == 'S' || str[i] == 'W' || str[i] == 'E' ||
+        str[i] == 'F' || str[i] == 'C')
         return (ft_strtrim(str, " \n\t"));
 
     return (ft_strdup(str));
@@ -82,8 +81,7 @@ int set_texture(char **dst, char *str)
         return (error_exit_msg("set_texture: duplicated texture id\n"));
     if (validate_texture_arg(str))
         return (1);
-    
-    
+
     *dst = ft_strdup(str);
     if (*dst == NULL)
         return (error_errno("set_texture"));
@@ -94,14 +92,15 @@ int validate_texture_arg(char *path)
 {
     int fd;
     int path_len;
-  
-    path_len =  ft_strlen(path);
+
+    path_len = ft_strlen(path);
 
     if (path_len < 5)
         return (error_exit_msg("validate_texture_arg: invalid file path\n"));
 
     if (ft_strncmp(&path[path_len - 4], ".xpm", 4) != 0)
-        return (error_exit_msg("validate_texture_arg: invalid file extension\n"));
+        return (
+            error_exit_msg("validate_texture_arg: invalid file extension\n"));
 
     fd = open(path, O_RDONLY);
     if (fd == -1)
@@ -125,16 +124,13 @@ void free_split(char **arr)
 
 bool is_texture_identifier(char *str)
 {
-	return (!ft_strncmp(str, "NO", 2) || 
-			!ft_strncmp(str, "SO", 2) ||
-			!ft_strncmp(str, "WE", 2) || 
-			!ft_strncmp(str, "EA", 2));
+    return (!ft_strncmp(str, "NO", 2) || !ft_strncmp(str, "SO", 2) ||
+            !ft_strncmp(str, "WE", 2) || !ft_strncmp(str, "EA", 2));
 }
 
 bool is_color_identifier(char *str)
 {
-	return (!ft_strncmp(str, "F", 1) || 
-			!ft_strncmp(str, "C", 1));
+    return (!ft_strncmp(str, "F", 1) || !ft_strncmp(str, "C", 1));
 }
 
 void free_file_data(char **file_data, int i)
@@ -162,7 +158,7 @@ int set_colour(const char *str, int *dst)
 
     *dst = (ft_atoi(tmp[0]) << 16) | (ft_atoi(tmp[1]) << 8) | ft_atoi(tmp[2]);
     free_split(tmp);
-	return (0);
+    return (0);
 }
 
 int validate_colour_args(char **arr)
