@@ -11,7 +11,7 @@ char *ft_copy_grid_line(t_map *map, char *src)
 	i = 0;
 	while (src[i] && src[i] != '\n' && i < map->map_width)
 	{
-		dest[i] = src[i]; 
+		dest[i] = src[i];
 		i++;
 	}
 	while(i < map->map_width)

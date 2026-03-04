@@ -18,8 +18,8 @@ void debug_dump_parsed(const t_map *map)
     printf("EA=%s\n", map->tex_E);
     printf("F=%d\n", map->floor_color);
     printf("C=%d\n", map->ceiling_color);
-    printf("PLAYER=%zu,%zu,%c\n", map->player_x, map->player_y,
-           map->player_dir);
+    printf("PLAYER=%zu,%zu,%c\n", map->pl_x, map->pl_y,
+           map->pl_dir);
     printf("MAP_W=%zu\n", map->map_width);
     printf("MAP_H=%zu\n", map->map_height);
     printf("MAP:\n");
@@ -34,6 +34,7 @@ void print_map_grid(const char **grid, size_t height, size_t width)
     y = 0;
     while (y < height)
     {
+    	//printf("grid_len[%zu]=[%zu]", y, strlen(grid[y]));
         printf("grid[%zu]=", y);
         putchar('"');
         x = 0;

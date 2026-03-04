@@ -43,9 +43,9 @@ void free_map(t_map *map)
     map->grid = NULL;
     map->map_height = 0;
     map->map_width = 0;
-    map->player_dir = ' ';
-    map->player_x = -1;
-    map->player_y = -1;
+    map->pl_dir = ' ';
+    map->pl_x = -1;
+    map->pl_y = -1;
 }
 
 static void print_error_marker(void)

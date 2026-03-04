@@ -104,6 +104,7 @@ SRCS := \
 	$(SRC_DIR)/parse.c \
 	$(SRC_DIR)/parse_map.c \
 	$(SRC_DIR)/parse_map_utils.c \
+	$(SRC_DIR)/parse_map_utils_2.c \
 	$(SRC_DIR)/parse_helpers.c \
 	$(SRC_DIR)/events.c \
 	$(SRC_DIR)/game.c \
@@ -118,6 +119,7 @@ DEBUG_SRCS := \
 	$(SRC_DIR)/parse.c \
 	$(SRC_DIR)/parse_map.c \
 	$(SRC_DIR)/parse_map_utils.c \
+	$(SRC_DIR)/parse_map_utils_2.c \
 	$(SRC_DIR)/parse_helpers.c \
 	$(SRC_DIR)/utils.c \
 	$(SRC_DIR)/debugging_helpers.c

@@ -64,6 +64,8 @@ char	**ft_copy_grid(t_map *map);
 void	ft_free_grid(char **grid);
 int		ft_flood_fill(t_map *map, char **grid, int x, int y);
 
+// parse_map_utils_2.c
+bool	ft_tabs_check(t_map *map, int i);
 
 // parse_helpers.c
 void initialize_map(t_map* map);

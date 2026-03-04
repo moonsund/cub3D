@@ -8,12 +8,15 @@ static bool	ft_is_valid_map(t_map *map);
 int ft_process_map(t_map *map, int i)
 {
 	// looping throught the file to find first line of map
-	while (ft_strchr(map->file_data[i], '1') == NULL)
+	while (ft_strchr(map->file_data[i], '1') == NULL
+		|| ft_strchr(map->file_data[i], '1') == NULL)
 	{
 		if (map->file_data[i] == NULL)
 			return (error_exit_msg("Empty map"), FAILURE);
 		i++; // now i pointing to first line
 	}
+	if (ft_tabs_check(map, i) == false)
+		return (error_exit_msg("Tabs are not allowed"), FAILURE);
 	ft_normalize_map(map, i);
 	// storing final map
 	if (ft_store_map(map, i) == FAILURE)
@@ -34,6 +37,7 @@ static void	ft_normalize_map(t_map *map, int i)
 	while (map->file_data[i])
 	{
 		line_len = ft_strlen(map->file_data[i]);
+		printf("debug line len=[%zu]\n", ft_strlen(map->file_data[i]));
 		if (line_len > map->map_width)
 			map->map_width = line_len;
 		map->map_height++;
@@ -43,19 +47,19 @@ static void	ft_normalize_map(t_map *map, int i)
 
 static int	ft_store_map(t_map *map, int i)
 {
-	int		grid_idx;
+	int		grid_row;
 
-	grid_idx = 0;
+	grid_row = 0;
 	map->grid = malloc(sizeof(char *) * (map->map_height + 1));
 	if (!map->grid)
 		return (FAILURE);
 	while (map->file_data[i])
 	{
-		map->grid[grid_idx] = ft_copy_grid_line(map, map->file_data[i]);
-		grid_idx++;
+		map->grid[grid_row] = ft_copy_grid_line(map, map->file_data[i]);
+		grid_row++;
 		i++;
 	}
-	map->grid[grid_idx] = NULL;
+	map->grid[grid_row] = NULL;
 	return (SUCCESS);
 }
 
