@@ -37,7 +37,7 @@ static void	ft_normalize_map(t_map *map, int i)
 	while (map->file_data[i])
 	{
 		line_len = ft_strlen(map->file_data[i]);
-		printf("debug line len=[%zu]\n", ft_strlen(map->file_data[i]));
+		//printf("debug line len=[%zu]\n", ft_strlen(map->file_data[i]));
 		if (line_len > map->map_width)
 			map->map_width = line_len;
 		map->map_height++;
