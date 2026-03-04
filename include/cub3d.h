@@ -1,13 +1,17 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-#include "libft.h"
+# include "../libs/libft/libft.h"
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <stdbool.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <stdbool.h>
+
+/* MACROS */
+# define SUCCESS 0
+# define FAILURE 1
 
 typedef struct s_map
 {
@@ -25,9 +29,9 @@ typedef struct s_map
     size_t map_height;
     size_t map_width;
 
-    size_t player_x;
-    size_t player_y;
-    char player_dir;
+    size_t  pl_x;
+    size_t  pl_y;
+    char    pl_dir;
 
 } t_map;
 
@@ -43,7 +47,23 @@ int main(int argc, char** argv);
 int validate_arguments(int argc, char** argv);
 
 // parse.c
-int fill_map(const char* file_path, t_map* map);
+int fill_map(const char *file_path, t_map *map);
+
+// parse_map.c
+int		ft_process_map(t_map *map, int i);
+//	static:
+//	static void	ft_normalize_map(t_map *map, int i);
+//	static int	ft_store_map(t_map *map, int i);
+//	static bool	ft_is_valid_pl_pos(char **grid);
+//	static bool	ft_is_valid_map(t_map *map);
+
+// parse_map_utils.c
+char	*ft_copy_grid_line(t_map *map, char *src);
+void	ft_set_pl_pos(t_map *map);
+char	**ft_copy_grid(t_map *map);
+void	ft_free_grid(char **grid);
+int		ft_flood_fill(t_map *map, char **grid, int x, int y);
+
 
 // parse_helpers.c
 void initialize_map(t_map* map);

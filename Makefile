@@ -102,10 +102,13 @@ SRCS := \
 	$(SRC_DIR)/validation.c \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/parse.c \
+	$(SRC_DIR)/parse_map.c \
+	$(SRC_DIR)/parse_map_utils.c \
 	$(SRC_DIR)/parse_helpers.c \
 	$(SRC_DIR)/events.c \
 	$(SRC_DIR)/game.c \
-	$(SRC_DIR)/utils.c
+	$(SRC_DIR)/utils.c \
+
 
 # no files that use mlx_*
 DEBUG_SRCS := \
@@ -113,6 +116,8 @@ DEBUG_SRCS := \
 	$(SRC_DIR)/validation.c \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/parse.c \
+	$(SRC_DIR)/parse_map.c \
+	$(SRC_DIR)/parse_map_utils.c \
 	$(SRC_DIR)/parse_helpers.c \
 	$(SRC_DIR)/utils.c \
 	$(SRC_DIR)/debugging_helpers.c

@@ -4,7 +4,6 @@ static int read_file(const char *file_path, t_map *map);
 static int procces_data_read(t_map *map);
 static int parse_texture_line(t_map *map, char *str);
 static int parse_colour_line(t_map *map, char *str);
-static int get_map_data(t_map *map, int i);
 
 int fill_map(const char *file_path, t_map *map)
 {
@@ -87,11 +86,8 @@ static int procces_data_read(t_map *map)
             return (error_exit_msg("procces_data_read: data corrupted"));
         i++;
     }
-
-    if (params < 6)
+    if (params < 6 || ft_process_map(map, i) == FAILURE)
         return (error_exit_msg("procces_data_read: missing data"));
-
-    get_map_data(map, i);
     return (0);
 }
 
@@ -151,12 +147,4 @@ static int parse_colour_line(t_map *map, char *str)
 
     free_split(tmp);
     return (return_code);
-}
-
-static int get_map_data(t_map *map, int start_index)
-{
-    (void)map;
-    (void)start_index;
-
-    return (0);
 }
