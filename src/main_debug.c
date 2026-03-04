@@ -16,6 +16,5 @@ int main(int argc, char **argv)
     
     // Clean up resources
     void cleanup_game(t_game *game);
-    printf("OK\n");
     return (0);
 }
