@@ -13,7 +13,10 @@ int error_exit_msg(const char *error_message)
 {
     print_error_marker();
     if (error_message)
+	{
         write(2, error_message, ft_strlen(error_message));
+        write(2, "\n", 1);
+	}
     return (1);
 }
 
