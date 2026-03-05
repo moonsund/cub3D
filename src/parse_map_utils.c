@@ -40,7 +40,7 @@ void	ft_set_pl_pos(t_map *map)
 					map->pl_dir = map->grid[y][x];
 					map->pl_x = x;
 					map->pl_y = y;
-					break;
+					break; // брейк только на внутреннего цикла, можно сразу return
 				}
 			x++;
 		}
@@ -61,7 +61,7 @@ char **ft_copy_grid(t_map *map)
 	{
 		temp_grid[i] = ft_strdup(map->grid[i]);
 			if (!temp_grid[i])
-				return (ft_free_grid(temp_grid), NULL);
+				return (ft_free_grid(temp_grid), NULL); // NOTE temp_grid еще не NULL терминирован
 		i++;
 	}
 	temp_grid[i] = NULL;
@@ -85,7 +85,7 @@ int	ft_flood_fill(t_map *map, char **grid, int x, int y)
 	// check if we passed over the grid
 	if (y < 0 || y >= (int)map->map_height)
 		return (FAILURE);
-	if ( x < 0 || x >= (int)ft_strlen(grid[y]))
+	if ( x < 0 || x >= (int)ft_strlen(grid[y])) // NOTE есть map->map_width
 		return (FAILURE);
 	// if we meet space
 	if (grid[y][x] == ' ')
@@ -101,5 +101,6 @@ int	ft_flood_fill(t_map *map, char **grid, int x, int y)
 		|| ft_flood_fill(map, grid, x, y + 1) == FAILURE
 		|| ft_flood_fill(map, grid, x, y - 1) == FAILURE)
 		return (FAILURE);
+	// нет проверки на возможные оставшиеся 0 до которых нельзя дотянуться.
 	return (SUCCESS);
 }

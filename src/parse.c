@@ -86,6 +86,7 @@ static int procces_data_read(t_map *map)
             return (error_exit_msg("procces_data_read: data corrupted"));
         i++;
     }
+    // NOTE: сообщение об ошибке относится только к 1ой части if, т.е. к доп инфе, а не к самой карте, в самой ft_process_map ошибки могут быть логическими и системными и они будут глубже. меня учили так: сообщение об ошибке печатается там, где она возникает - мне кажется это логичным.
     if (params < 6 || ft_process_map(map, i) == FAILURE)
         return (error_exit_msg("procces_data_read: missing data"));
     return (0);
