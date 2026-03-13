@@ -7,8 +7,6 @@ static int parse_colour_line(t_map *map, char *str);
 
 int fill_map(const char *file_path, t_map *map)
 {
-    initialize_map(map);
-
     if (count_lines_in_file(file_path, &map->lines_count) != 0)
         return (1);
 

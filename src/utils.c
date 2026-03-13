@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
 static void print_error_marker(void);
-void free_map(t_map *map);
+static void cleanup_map(t_map *map);
 
 int error_errno(const char *context)
 {
@@ -23,29 +23,43 @@ int error_exit_msg(const char *error_message)
 
 void cleanup_game(t_game *game)
 {
-    free_map(game->map);
+    if (!game)
+        return;
+    cleanup_map(&game->map);
+    if (game->win)
+        mlx_destroy_window(game->mlx, game->win);
+
+    if (game->mlx)
+    {
+        mlx_destroy_display(game->mlx);
+        free(game->mlx);
+    }
 }
 
-void free_map(t_map *map)
+static void cleanup_map(t_map *map)
 {
     size_t i;
 
-    i = 0;
-    while (i < map->lines_count)
-        free(map->file_data[i]);
-    free(map->file_data);
+    if (map->file_data)
+    {
+        i = 0;
+        while (i < map->lines_count)
+        {
+            free(map->file_data[i]);
+            i++;
+        }
+        map->file_data = NULL;
+    }   
     free(map->tex_N);
+    map->tex_N = NULL;
     free(map->tex_E);
+    map->tex_E = NULL;
     free(map->tex_S);
+    map->tex_S = NULL;
     free(map->tex_W);
-    map->ceiling_color = -1;
-    map->floor_color = -1;
+    map->tex_W = NULL;
+    free(map->grid); // TODO need proper cleaning
     map->grid = NULL;
-    map->map_height = 0;
-    map->map_width = 0;
-    map->pl_dir = ' ';
-    map->pl_x = -1;
-    map->pl_y = -1;
 }
 
 static void print_error_marker(void)

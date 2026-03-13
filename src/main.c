@@ -2,27 +2,20 @@
 
 int main(int argc, char **argv)
 {
-    t_map map;
     t_game game;
 
-    (void)game;
+    initialize_game(&game);
+
     if (validate_arguments(argc, argv) != 0)
         return (EXIT_FAILURE);
 
-    if (fill_map(argv[1], &map) != 0)
-        return (EXIT_FAILURE);
+    if (fill_map(argv[1], &game.map) != 0)
+        return (cleanup_game(&game), EXIT_FAILURE);
 
-    if (!initialize_game(&game, argv[1]))
-    {
-        printf("Failed to initialize the game.\n");
-        return (EXIT_FAILURE);
-    }
-
-    game_loop(&game);
-
+    if (game_loop(&game) != 0)
+        return (cleanup_game(&game), EXIT_FAILURE);
+    
     // Clean up resources
     cleanup_game(&game);
-
-    printf("OK\n");
     return (0);
 }
