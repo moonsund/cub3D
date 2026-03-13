@@ -2,6 +2,7 @@
 #define CUB3D_H
 
 # include "../libs/libft/libft.h"
+# include "../libs/minilibx-linux/mlx.h"
 
 # include <stdio.h>
 # include <unistd.h>
@@ -25,19 +26,28 @@ typedef struct s_map
     int		floor_color;
     int		ceiling_color;
 
-    const char** grid;
+    char** grid;
     size_t map_height;
     size_t map_width;
 
-    size_t  pl_x;
-    size_t  pl_y;
-    char    pl_dir;
 
 } t_map;
 
+typedef struct s_player
+{
+    size_t  pl_x;
+    size_t  pl_y;
+    char    pl_dir;
+} t_player;
+
+
 typedef struct s_game
 {
-    t_map* map;
+    t_map map;
+    t_player player;
+
+    void		*mlx;
+	void		*win;
 
 } t_game;
 
@@ -65,7 +75,6 @@ void	ft_free_grid(char **grid);
 int		ft_flood_fill(t_map *map, char **grid, int x, int y);
 
 // parse_helpers.c
-void initialize_map(t_map* map);
 int count_lines_in_file(const char* file_path, size_t* lines_count);
 char* trim_if_needed(char* str);
 int set_texture(char** target, char* str);
@@ -78,16 +87,18 @@ int set_colour(const char* str, int* dst);
 int validate_colour_args(char** arr);
 
 // init.c
-int initialize_game(t_game* game, char* map);
+void initialize_game(t_game* game);
 
 // game.c
-void game_loop(t_game* game);
+int game_loop(t_game *game);
 
 // utils.c
 int error_errno(const char* context);
 int error_exit_msg(const char* error_message);
 void cleanup_game(t_game* game);
-void free_map(t_map* map);
+
+// events.c
+void	handle_events(t_game *fdf);
 
 // debugging_helpers.c
 void print_file_data(t_map* map);

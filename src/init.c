@@ -1,8 +1,14 @@
 #include "cub3d.h"
 
-int initialize_game(t_game *game, char *map)
+void initialize_game(t_game *game)
 {
-    (void)game;
-    (void)map;
-    return (1);
+    ft_bzero(&game, sizeof(t_game));
+    game->map.floor_color = -1;
+    game->map.ceiling_color = -1;
+    game->player.pl_x = -1;
+    game->player.pl_y = -1;
+    game->player.pl_dir = ' ';
+
+
+
 }

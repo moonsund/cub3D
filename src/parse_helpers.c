@@ -1,6 +1,5 @@
 #include "cub3d.h"
 
-void initialize_map(t_map *map);
 int count_lines_in_file(const char *file_path, size_t *lines_count);
 char *trim_if_needed(char *str);
 int set_texture(char **target, char *str);
@@ -11,24 +10,6 @@ bool is_color_identifier(char *str);
 void free_file_data(char **file_data, int i);
 int set_colour(const char *str, int *dst);
 int validate_colour_args(char **arr);
-
-void initialize_map(t_map *map)
-{
-    map->lines_count = 0;
-    map->file_data = NULL;
-    map->tex_N = NULL;
-    map->tex_E = NULL;
-    map->tex_S = NULL;
-    map->tex_W = NULL;
-    map->ceiling_color = -1;
-    map->floor_color = -1;
-    map->grid = NULL;
-    map->map_height = 0;
-    map->map_width = 0;
-    map->pl_dir = ' ';
-    map->pl_x = -1;
-    map->pl_y = -1;
-}
 
 int count_lines_in_file(const char *file_path, size_t *lines_count)
 {
