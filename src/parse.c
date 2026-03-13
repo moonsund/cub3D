@@ -22,8 +22,6 @@ int fill_map(const char *file_path, t_map *map)
     if (procces_data_read(map) != 0)
         return (1);
 
-    // if (!validate_data(map));
-    // 	return (1);
     return (0);
 }
 
@@ -86,8 +84,10 @@ static int procces_data_read(t_map *map)
             return (error_exit_msg("procces_data_read: data corrupted"));
         i++;
     }
-    if (params < 6 || ft_process_map(map, i) == FAILURE)
+    if (params < 6)
         return (error_exit_msg("procces_data_read: missing data"));
+	if (ft_process_map(map, i) == FAILURE)
+		return (1);
     return (0);
 }
 
