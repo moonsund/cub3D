@@ -16,14 +16,14 @@
 typedef struct s_map
 {
     size_t lines_count;
-    char** file_data;
+    char	**file_data;
 
-    char* tex_N;
-    char* tex_S;
-    char* tex_E;
-    char* tex_W;
-    int floor_color;
-    int ceiling_color;
+    char	*tex_N;
+    char	*tex_S;
+    char	*tex_E;
+    char	*tex_W;
+    int		floor_color;
+    int		ceiling_color;
 
     const char** grid;
     size_t map_height;
@@ -41,31 +41,28 @@ typedef struct s_game
 
 } t_game;
 
-int main(int argc, char** argv);
+int 	main(int argc, char** argv);
 
 // validation.c
-int validate_arguments(int argc, char** argv);
+int 	validate_arguments(int argc, char** argv);
 
 // parse.c
 int fill_map(const char *file_path, t_map *map);
 
 // parse_map.c
-int		ft_process_map(t_map *map, int i);
-//	static:
-//	static void	ft_normalize_map(t_map *map, int i);
-//	static int	ft_store_map(t_map *map, int i);
-//	static bool	ft_is_valid_pl_pos(char **grid);
-//	static bool	ft_is_valid_map(t_map *map);
-
-// parse_map_utils.c
-char	*ft_copy_grid_line(t_map *map, char *src);
+bool	ft_forbid_and_double_check(t_map *map, int i);
+int		ft_skip_empty_lines(t_map *map, int *i);
+int		ft_get_height_and_valid_end(t_map *map, int i);
+int		ft_check_garbage(t_map *map, int i);
+void	ft_normalize_map(t_map *map, int i);
+int		ft_store_map(t_map *map, int i);
+bool	ft_is_valid_pl_pos(t_map *map, const char **grid);
+bool	ft_is_valid_map(t_map *map);
+char 	*ft_copy_grid_line(t_map *map, char *src);
 void	ft_set_pl_pos(t_map *map);
-char	**ft_copy_grid(t_map *map);
+char 	**ft_copy_grid(t_map *map);
 void	ft_free_grid(char **grid);
 int		ft_flood_fill(t_map *map, char **grid, int x, int y);
-
-// parse_map_utils_2.c
-bool	ft_tabs_check(t_map *map, int i);
 
 // parse_helpers.c
 void initialize_map(t_map* map);
