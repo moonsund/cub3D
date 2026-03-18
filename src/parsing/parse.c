@@ -1,24 +1,24 @@
 #include "cub3d.h"
 
 static int read_file(const char *file_path, t_map *map);
-static int procces_data_read(t_map *map);
+static int procces_data_read(t_map *map, t_player *player);
 static int parse_texture_line(t_map *map, char *str);
 static int parse_colour_line(t_map *map, char *str);
 
-int fill_map(const char *file_path, t_map *map)
+int parse_game_config(const char *file_path, t_map *map, t_player *player)
 {
-    if (count_lines_in_file(file_path, &map->lines_count) != 0)
-        return (1);
+    if (count_lines_in_file(file_path, &map->lines_count) == FAILURE)
+        return (FAILURE);
 
     map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
     if (!map->file_data)
         return (error_errno("fill_map"));
 
-    if (read_file(file_path, map) != 0)
-        return (1);
+    if (read_file(file_path, map) == FAILURE)
+        return (FAILURE);
 
-    if (procces_data_read(map) != 0)
-        return (1);
+    if (procces_data_read(map, player) == FAILURE)
+        return (FAILURE);
 
     return (0);
 }
@@ -48,7 +48,7 @@ static int read_file(const char *file_path, t_map *map)
     return (0);
 }
 
-static int procces_data_read(t_map *map)
+static int procces_data_read(t_map *map, t_player *player)
 {
     size_t i;
     int params;
@@ -68,24 +68,26 @@ static int procces_data_read(t_map *map)
 
         if (is_texture_identifier(line))
         {
-            if (parse_texture_line(map, line) != 0)
-                return (1);
+            if (parse_texture_line(map, line) == FAILURE)
+                return (FAILURE);
             params++;
         }
         else if (is_color_identifier(line))
         {
-            if (parse_colour_line(map, line) != 0)
-                return (1);
+            if (parse_colour_line(map, line) == FAILURE)
+                return (FAILURE);
             params++;
         }
         else
-            return (error_exit_msg("procces_data_read: data corrupted"));
+            return (error_msg("procces_data_read: data corrupted"));
         i++;
     }
     if (params < 6)
-        return (error_exit_msg("procces_data_read: missing data"));
-	if (ft_process_map(map, i) == FAILURE)
+        return (error_msg("procces_data_read: missing data"));
+
+	if (parse_map_section(map, player, i) == FAILURE)
 		return (1);
+
     return (0);
 }
 
@@ -101,7 +103,7 @@ static int parse_texture_line(t_map *map, char *str)
     if (!tmp[0] || !tmp[1] || tmp[2])
     {
         free_split(tmp);
-        return (error_exit_msg("invalid texture line format"));
+        return (error_msg("parse_texture_line: invalid texture line format"));
     }
 
     return_code = 0;
@@ -114,7 +116,7 @@ static int parse_texture_line(t_map *map, char *str)
     else if (ft_strncmp(tmp[0], "WE", 3) == 0)
         return_code = set_texture(&map->tex_W, tmp[1]);
     else
-        return_code = error_exit_msg("unknown texture id");
+        return_code = error_msg("parse_texture_line: unknown texture id");
 
     free_split(tmp);
     return (return_code);
@@ -132,7 +134,7 @@ static int parse_colour_line(t_map *map, char *str)
     if (!tmp[0] || !tmp[1] || tmp[2])
     {
         free_split(tmp);
-        return (error_exit_msg("invalid colour line format"));
+        return (error_msg("get_colours_data: invalid colour line format"));
     }
 
     return_code = 0;
@@ -141,7 +143,7 @@ static int parse_colour_line(t_map *map, char *str)
     else if (tmp[0][0] == 'C' && tmp[0][1] == '\0')
         return_code = set_colour(tmp[1], &map->ceiling_color);
     else
-        return_code = error_exit_msg("unknown colour id");
+        return_code = error_msg("get_colours_data: unknown colour id");
 
     free_split(tmp);
     return (return_code);

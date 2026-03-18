@@ -23,7 +23,7 @@ int count_lines_in_file(const char *file_path, size_t *lines_count)
 
     line = get_next_line(fd);
     if (!line)
-        return (close(fd), error_exit_msg("count_lines: The file is empty.\n"));
+        return (close(fd), error_msg("count_lines: The file is empty.\n"));
 
     i = 0;
     while (line)
@@ -59,7 +59,7 @@ char *trim_if_needed(char *str)
 int set_texture(char **dst, char *str)
 {
     if (*dst != NULL)
-        return (error_exit_msg("set_texture: duplicated texture id\n"));
+        return (error_msg("set_texture: duplicated texture id\n"));
     if (validate_texture_arg(str))
         return (1);
 
@@ -77,11 +77,11 @@ int validate_texture_arg(char *path)
     path_len = ft_strlen(path);
 
     if (path_len < 5)
-        return (error_exit_msg("validate_texture_arg: invalid file path\n"));
+        return (error_msg("validate_texture_arg: invalid file path\n"));
 
     if (ft_strncmp(&path[path_len - 4], ".xpm", 4) != 0)
         return (
-            error_exit_msg("validate_texture_arg: invalid file extension\n"));
+            error_msg("validate_texture_arg: invalid file extension\n"));
 
     fd = open(path, O_RDONLY);
     if (fd == -1)
@@ -125,7 +125,7 @@ int set_colour(const char *str, int *dst)
     char **tmp;
 
     if (*dst != -1)
-        return (error_exit_msg("set_colours: duplicated colour id"));
+        return (error_msg("set_colours: duplicated colour id"));
 
     tmp = ft_split(str, ',');
     if (!tmp)
@@ -149,21 +149,21 @@ int validate_colour_args(char **arr)
 
     i = 0;
     if (!arr[0] || !arr[1] || !arr[2] || arr[3])
-        return (error_exit_msg("set_colours: invalid colour line format"));
+        return (error_msg("set_colours: invalid colour line format"));
 
     while (i < 3)
     {
         if (arr[i][0] == '\0')
-            return (error_exit_msg("validate_colour_args: empty component"));
+            return (error_msg("validate_colour_args: empty component"));
         j = 0;
         while (arr[i][j])
         {
             if (!ft_isdigit(arr[i][j]))
-                return (error_exit_msg("validate_colour_args: is not digit"));
+                return (error_msg("validate_colour_args: is not digit"));
             j++;
         }
         if (ft_atoi(arr[i]) < 0 || ft_atoi(arr[i]) > 255)
-            return (error_exit_msg("validate_colour_args: out of range"));
+            return (error_msg("validate_colour_args: out of range"));
         i++;
     }
     return (0);

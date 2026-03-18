@@ -6,13 +6,13 @@ int main(int argc, char **argv)
 
     initialize_game(&game);
 
-    if (validate_arguments(argc, argv) != 0)
+    if (validate_arguments(argc, argv) == FAILURE)
         return (EXIT_FAILURE);
 
-    if (fill_map(argv[1], &game.map) != 0)
+    if (parse_game_config(argv[1], &game.map, &game.player) == FAILURE)
         return (cleanup_game(&game), EXIT_FAILURE);
 
-    if (game_loop(&game) != 0)
+    if (game_loop(&game) == FAILURE)
         return (cleanup_game(&game), EXIT_FAILURE);
     
     // Clean up resources

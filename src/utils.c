@@ -7,10 +7,10 @@ int error_errno(const char *context)
 {
     print_error_marker();
     perror(context);
-    return (1);
+    return (FAILURE);
 }
 
-int error_exit_msg(const char *error_message)
+int error_msg(const char *error_message)
 {
     print_error_marker();
     if (error_message)
@@ -18,7 +18,7 @@ int error_exit_msg(const char *error_message)
         write(2, error_message, ft_strlen(error_message));
         write(2, "\n", 1);
 	}
-    return (1);
+    return (FAILURE);
 }
 
 void cleanup_game(t_game *game)
@@ -58,8 +58,23 @@ static void cleanup_map(t_map *map)
     map->tex_S = NULL;
     free(map->tex_W);
     map->tex_W = NULL;
-    free(map->grid); // TODO need proper cleaning
-    map->grid = NULL;
+    free_grid(map->grid);
+	map->grid = NULL;
+}
+
+void	free_grid(char **grid)
+{
+	size_t	i;
+
+	if (!grid)
+		return ;
+	i = 0;
+	while (grid[i])
+	{
+		free(grid[i]);
+		i++;
+	}
+	free(grid);
 }
 
 static void print_error_marker(void)
