@@ -20,3 +20,5 @@
 # Ignore Docker files
 Dockerfile
 docker-compose.yml
+
+libft.a

@@ -16,7 +16,7 @@
 
 typedef struct s_map
 {
-    size_t lines_count;
+    int lines_count;
     char	**file_data;
 
     char	*tex_N;
@@ -27,16 +27,16 @@ typedef struct s_map
     int		ceiling_color;
 
     char** grid;
-    size_t map_height;
-    size_t map_width;
+    int map_height;
+    int map_width;
 
 
 } t_map;
 
 typedef struct s_player
 {
-    size_t  pl_x;
-    size_t  pl_y;
+    double  pl_x;
+    double  pl_y;
     char    pl_dir;
 } t_player;
 
@@ -53,56 +53,81 @@ typedef struct s_game
 
 int 	main(int argc, char** argv);
 
+// intit.c
+void initialize_game(t_game *game);
+
 // validation.c
 int 	validate_arguments(int argc, char** argv);
 
+// PARSING
 // parse.c
-int fill_map(const char *file_path, t_map *map);
+int parse_game_config(const char *file_path, t_map *map, t_player *player);
+
+// file_loader.c
+int count_lines_in_file(const char *file_path, int *lines_count);
+int read_file(const char *file_path, t_map *map);
+char *trim_if_needed(char *str);
+void free_file_data(char **file_data, int i); //TO_DO
+
+// parse_data.c
+int process_data_read(t_map *map, t_player *player);
+int parse_texture_line(t_map *map, char *str);
+int parse_colour_line(t_map *map, char *str);
+bool is_texture_identifier(char *str);
+bool is_color_identifier(char *str);
+
+// parse_texture_colour_utils.c
+int set_texture(char **dst, char *str);
+int validate_texture_arg(char *path);
+int set_colour(const char *str, int *dst);
+int validate_colour_args(char **arr);
+void free_split(char **arr);
 
 // parse_map.c
-bool	ft_forbid_and_double_check(t_map *map, int i);
-int		ft_skip_empty_lines(t_map *map, int *i);
-int		ft_get_height_and_valid_end(t_map *map, int i);
-int		ft_check_garbage(t_map *map, int i);
-void	ft_normalize_map(t_map *map, int i);
-int		ft_store_map(t_map *map, int i);
-bool	ft_is_valid_pl_pos(t_map *map, const char **grid);
-bool	ft_is_valid_map(t_map *map);
-char 	*ft_copy_grid_line(t_map *map, char *src);
-void	ft_set_pl_pos(t_map *map);
-char 	**ft_copy_grid(t_map *map);
-void	ft_free_grid(char **grid);
-int		ft_flood_fill(t_map *map, char **grid, int x, int y);
+int parse_map_section(t_map *map, t_player *player, int start);
+int	build_map_grid(t_map *map, int i);
+int find_player_position(t_player *player, char **grid);
+int	validate_map_closure(t_map *map, t_player *player);
+int	flood_fill(t_map *map, char **grid, int x, int y);
 
-// parse_helpers.c
-int count_lines_in_file(const char* file_path, size_t* lines_count);
-char* trim_if_needed(char* str);
-int set_texture(char** target, char* str);
-int validate_texture_arg(char* path);
-void free_split(char** arr);
-bool is_texture_identifier(char* str);
-bool is_color_identifier(char* str);
-void free_file_data(char** file_data, int i);
-int set_colour(const char* str, int* dst);
-int validate_colour_args(char** arr);
+// parse_map_utils.c
+void skip_empty_lines(char **lines, int *i);
+bool line_is_empty(char *line);
+void get_map_dimensions(char **lines, int *height, int *width, int i);
+int check_trailing_content(char **lines, int i);
+int	validate_map_chars(char **lines, int i);
+
+// parse_map_copy.c
+char *copy_line(char *src, size_t width);
+char **copy_grid(t_map *map);
+void	set_player_position(t_player *player, char dir, int y, int x);
+
+
+
+
+
 
 // init.c
 void initialize_game(t_game* game);
+
 
 // game.c
 int game_loop(t_game *game);
 
 // utils.c
 int error_errno(const char* context);
-int error_exit_msg(const char* error_message);
+int error_msg(const char* error_message);
 void cleanup_game(t_game* game);
+void	free_grid(char **grid);
+void print_error_marker(void);
+void cleanup_map(t_map *map);
 
 // events.c
-void	handle_events(t_game *fdf);
+void	register_hooks(t_game *game);
 
 // debugging_helpers.c
 void print_file_data(t_map* map);
-void debug_dump_parsed(const t_map* map);
+void debug_dump_parsed(const t_game* game);
 void print_map_grid(const char** grid, size_t h, size_t w);
 
 #endif

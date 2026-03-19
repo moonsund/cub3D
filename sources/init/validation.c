@@ -7,10 +7,10 @@ int validate_arguments(int argc, char **argv)
     int fd;
 
     if (argc != 2)
-        return (error_exit_msg("Usage: ./cub3d <map_file>\n"));
+        return (error_msg("Usage: ./cub3d <map_file>\n"));
 
     if (!has_cub_extension(argv[1]))
-        return (error_exit_msg("validate_arguments: invalid file extension\n"));
+        return (error_msg("validate_arguments: invalid file extension\n"));
 
     fd = open(argv[1], O_RDONLY);
     if (fd == -1)
