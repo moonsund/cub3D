@@ -14,8 +14,8 @@
 NAME        := cub3d
 DEBUG_NAME  := cub3d_debug
 
-SRC_DIR     := src
-OBJ_DIR     := obj
+SRC_DIR     := sources
+OBJ_DIR     := objects
 DBG_OBJ_DIR := obj_debug
 INC_DIR     := include
 LIBS_DIR    := libs
@@ -97,34 +97,55 @@ LEAKS_OPTS ?= --atExit --
 # =======================
 # Sources
 # =======================
-SRCS := \
-	$(SRC_DIR)/main.c \
-	$(SRC_DIR)/validation.c \
-	$(SRC_DIR)/init.c \
-	$(SRC_DIR)/parse.c \
-	$(SRC_DIR)/parse_map.c \
-	$(SRC_DIR)/parse_helpers.c \
-	$(SRC_DIR)/events.c \
-	$(SRC_DIR)/game.c \
-	$(SRC_DIR)/utils.c \
 
+SRC_MAIN = \
+	main.c
+
+DEBUG_SRC_MAIN = \
+	main_debug.c
+
+DEBUG_SRC_DEBUGGING = \
+	debugging/debugging_helpers.c
+
+SRC_PARSING = \
+	parsing/parser.c \
+	parsing/parse_file.c \
+	parsing/parse_data.c \
+	parsing/parse_data_utils.c \
+	parsing/parse_map.c \
+	parsing/parse_map_utils.c \
+	parsing/parse_map_copy.c \
+
+SRC_GAME = \
+	game/events.c \
+	game/game.c \
+
+SRC_INIT = \
+	init/init.c \
+	init/utils.c \
+	init/validation.c \
+	
+SRC_FILES = \
+	$(SRC_MAIN) \
+	$(SRC_PARSING) \
+	$(SRC_GAME) \
+	$(SRC_INIT) \
 
 # no files that use mlx_*
-DEBUG_SRCS := \
-	$(SRC_DIR)/main_debug.c \
-	$(SRC_DIR)/validation.c \
-	$(SRC_DIR)/init.c \
-	$(SRC_DIR)/parse.c \
-	$(SRC_DIR)/parse_map.c \
-	$(SRC_DIR)/parse_helpers.c \
-	$(SRC_DIR)/utils.c \
-	$(SRC_DIR)/debugging_helpers.c
+DEBUG_SRC_FILES = \
+	$(DEBUG_SRC_MAIN) \
+	$(SRC_PARSING) \
+	$(DEBUG_SRC_DEBUGGING) \
+	$(SRC_INIT) \
+
 
 # $(VAR:pattern=replacement)
-OBJS       := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRCS := $(addprefix $(SRC_DIR)/,$(SRC_FILES))
+OBJS := $(addprefix $(OBJ_DIR)/,$(SRC_FILES:.c=.o))
 DEPS       := $(OBJS:.o=.d)
 
-DEBUG_OBJS := $(DEBUG_SRCS:$(SRC_DIR)/%.c=$(DBG_OBJ_DIR)/%.o)
+DEBUG_SRCS := $(addprefix $(SRC_DIR)/,$(DEBUG_SRC_FILES))
+DEBUG_OBJS := $(addprefix $(DBG_OBJ_DIR)/,$(DEBUG_SRC_FILES:.c=.o))
 DEBUG_DEPS := $(DEBUG_OBJS:.o=.d)
 
 .PHONY: all debug bootstrap deps_libft deps_full depscheck \

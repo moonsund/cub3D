@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int count_lines_in_file(const char *file_path, size_t *lines_count)
+int count_lines_in_file(const char *file_path, int *lines_count)
 {
     int fd;
     int i;
@@ -31,7 +31,7 @@ int read_file(const char *file_path, t_map *map)
 {
     int fd;
     char *line;
-    size_t i;
+    int i;
 
     fd = open(file_path, O_RDONLY);
     if (fd == -1)
@@ -54,7 +54,7 @@ int read_file(const char *file_path, t_map *map)
 
 char *trim_if_needed(char *str)
 {
-    size_t i;
+    int i;
 
     if (!str)
         return (NULL);

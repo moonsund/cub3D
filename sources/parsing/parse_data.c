@@ -1,54 +1,6 @@
 #include "cub3d.h"
 
-static int read_file(const char *file_path, t_map *map);
-static int procces_data_read(t_map *map, t_player *player);
-static int parse_texture_line(t_map *map, char *str);
-static int parse_colour_line(t_map *map, char *str);
-
-int parse_game_config(const char *file_path, t_map *map, t_player *player)
-{
-    if (count_lines_in_file(file_path, &map->lines_count) == FAILURE)
-        return (FAILURE);
-
-    map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
-    if (!map->file_data)
-        return (error_errno("fill_map"));
-
-    if (read_file(file_path, map) == FAILURE)
-        return (FAILURE);
-
-    if (procces_data_read(map, player) == FAILURE)
-        return (FAILURE);
-
-    return (0);
-}
-
-static int read_file(const char *file_path, t_map *map)
-{
-    int fd;
-    char *line;
-    size_t i;
-
-    fd = open(file_path, O_RDONLY);
-    if (fd == -1)
-        return (error_errno("read_file"));
-    i = 0;
-    while (i < map->lines_count)
-    {
-        line = get_next_line(fd);
-        map->file_data[i] = trim_if_needed(line);
-        free(line);
-        if (!map->file_data[i])
-            return (close(fd), free_file_data(map->file_data, i),
-                    error_errno("read_file"));
-        i++;
-    }
-    map->file_data[i] = NULL;
-    close(fd);
-    return (0);
-}
-
-static int procces_data_read(t_map *map, t_player *player)
+int process_data_read(t_map *map, t_player *player)
 {
     size_t i;
     int params;
@@ -59,13 +11,11 @@ static int procces_data_read(t_map *map, t_player *player)
     while (map->file_data[i] && params < 6)
     {
         line = map->file_data[i];
-
         if (line[0] == '\n' || line[0] == '\0')
         {
             i++;
             continue;
         }
-
         if (is_texture_identifier(line))
         {
             if (parse_texture_line(map, line) == FAILURE)
@@ -82,16 +32,17 @@ static int procces_data_read(t_map *map, t_player *player)
             return (error_msg("procces_data_read: data corrupted"));
         i++;
     }
+    
     if (params < 6)
         return (error_msg("procces_data_read: missing data"));
-
-	if (parse_map_section(map, player, i) == FAILURE)
+    
+    if (parse_map_section(map, player, i) == FAILURE)
 		return (1);
 
     return (0);
 }
 
-static int parse_texture_line(t_map *map, char *str)
+int parse_texture_line(t_map *map, char *str)
 {
     char **tmp;
     int return_code;
@@ -122,7 +73,7 @@ static int parse_texture_line(t_map *map, char *str)
     return (return_code);
 }
 
-static int parse_colour_line(t_map *map, char *str)
+int parse_colour_line(t_map *map, char *str)
 {
     char **tmp;
     int return_code;
@@ -147,4 +98,15 @@ static int parse_colour_line(t_map *map, char *str)
 
     free_split(tmp);
     return (return_code);
+}
+
+bool is_texture_identifier(char *str)
+{
+    return (!ft_strncmp(str, "NO", 2) || !ft_strncmp(str, "SO", 2) ||
+            !ft_strncmp(str, "WE", 2) || !ft_strncmp(str, "EA", 2));
+}
+
+bool is_color_identifier(char *str)
+{
+    return (!ft_strncmp(str, "F", 1) || !ft_strncmp(str, "C", 1));
 }

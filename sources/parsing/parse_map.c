@@ -8,7 +8,7 @@ int parse_map_section(t_map *map, t_player *player, int start)
 	
 	get_map_dimensions(map->file_data, &map->map_height, &map->map_width, start);
 
-	if (check_trailing_content(map, start + map->map_height) == FAILURE)
+	if (check_trailing_content(map->file_data, start + map->map_height) == FAILURE)
 		return (FAILURE);
 
 	if (validate_map_chars(map->file_data, start) == FAILURE)
@@ -100,7 +100,7 @@ int	validate_map_closure(t_map *map, t_player *player)
 int	flood_fill(t_map *map, char **grid, int x, int y)
 {
 	// check if we passed over the grid
-	if (y < 0 || y >= (int)map->map_height)
+	if (y < 0 || y >= map->map_height)
 		return (FAILURE);
 	if (x < 0 || x >= map->map_width)
 		return (FAILURE);

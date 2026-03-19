@@ -31,7 +31,7 @@ int create_game_window(t_game *game)
 	if (!game->win)
 		return (1);
 
-
+    return (0);
 }
 
 

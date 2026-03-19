@@ -12,7 +12,7 @@ int parse_game_config(const char *file_path, t_map *map, t_player *player)
     if (read_file(file_path, map) == FAILURE)
         return (FAILURE);
 
-    if (procces_data_read(map, player) == FAILURE)
+    if (process_data_read(map, player) == FAILURE)
         return (FAILURE);
 
     return (0);

@@ -13,7 +13,7 @@ void skip_empty_lines(char **lines, int *i)
 
 bool line_is_empty(char *line)
 {
-    size_t i = 0;
+    int i = 0;
 
     while (line[i])
     {
@@ -24,9 +24,9 @@ bool line_is_empty(char *line)
     return (true);
 }
 
-void get_map_dimensions(char **lines, size_t *height, size_t *width, int i)
+void get_map_dimensions(char **lines, int *height, int *width, int i)
 {
-    size_t line_len;
+    int line_len;
 
     *height = 0;
     *width = 0;

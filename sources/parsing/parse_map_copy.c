@@ -7,7 +7,11 @@ char *copy_line(char *src, size_t width)
 
 	dest = malloc(sizeof(char) * (width + 1));
 	if (!dest)
-		return (error_errno("copy_line"));
+		{
+		print_error_marker();
+    	perror("copy_line");
+		return (NULL);
+		}
 	i = 0;
 	while (i < width && src[i] && src[i] != '\n')
 	{
@@ -27,7 +31,11 @@ char **copy_grid(t_map *map)
 
 	grid_copy = malloc(sizeof(char *) * (map->map_height + 1));
 	if (!grid_copy)
-		return (error_errno("copy_grid"));
+		{
+		print_error_marker();
+    	perror("copy_grid");
+		return (NULL);
+		}
 	i = 0;
 	while (i < map->map_height + 1)
 		grid_copy[i++] = NULL;
@@ -37,8 +45,9 @@ char **copy_grid(t_map *map)
 		grid_copy[i] = ft_strdup(map->grid[i]);
 			if (!grid_copy[i])
 			{
-				free_grid(grid_copy);
-				return (error_errno("copy_grid: ft_strdup failed"));
+				print_error_marker();
+    			perror("copy_grid: ft_strdup failed");
+				return (NULL);
 			}
 		i++;
 	}
