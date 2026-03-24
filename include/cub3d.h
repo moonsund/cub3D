@@ -96,6 +96,7 @@ bool line_is_empty(char *line);
 void get_map_dimensions(char **lines, int *height, int *width, int i);
 int check_trailing_content(char **lines, int i);
 int	validate_map_chars(char **lines, int i);
+int	ft_map_line_length(char *line);
 
 // parse_map_copy.c
 char *copy_line(char *src, size_t width);

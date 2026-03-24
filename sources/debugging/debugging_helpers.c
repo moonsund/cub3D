@@ -22,7 +22,7 @@ void debug_dump_parsed(const t_game *game)
     printf("EA=%s\n", map.tex_E);
     printf("F=%d\n", map.floor_color);
     printf("C=%d\n", map.ceiling_color);
-    printf("PLAYER=%f,%f,%c\n", game->player.pl_x, game->player.pl_y,
+    printf("PLAYER=%d,%d,%c\n", (int)game->player.pl_x, (int)game->player.pl_y,
            game->player.pl_dir);
     printf("MAP_W=%u\n", map.map_width);
     printf("MAP_H=%u\n", map.map_height);

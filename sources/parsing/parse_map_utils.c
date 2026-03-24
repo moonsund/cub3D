@@ -34,12 +34,22 @@ void get_map_dimensions(char **lines, int *height, int *width, int i)
     {
         if (line_is_empty(lines[i]))
             break;
-        line_len = ft_strlen(lines[i]);
-        if (line_len > *width)
+        line_len = ft_map_line_length(lines[i]);
+		if (line_len > *width)
             *width = line_len;
         (*height)++;
         i++;
     }
+}
+
+int	ft_map_line_length(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && line[i] != '\n') 
+		i++;
+	return (i);
 }
 
 int check_trailing_content(char **lines, int i)

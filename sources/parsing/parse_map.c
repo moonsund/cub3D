@@ -120,5 +120,3 @@ int	flood_fill(t_map *map, char **grid, int x, int y)
 		return (FAILURE);
 	return (SUCCESS);
 }
-
-
