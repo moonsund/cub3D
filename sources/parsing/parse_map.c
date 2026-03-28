@@ -1,28 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/28 13:33:37 by aidarsharaf       #+#    #+#             */
+/*   Updated: 2026/03/28 13:46:00 by aidarsharaf      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int parse_map_section(t_map *map, t_player *player, int start)
+int	parse_map_section(t_map *map, t_player *player, int start)
 {
+	int	*map_height;
+	int	*map_width;
+
+	map_height = &map->map_height;
+	map_width = &map->map_width;
 	skip_empty_lines(map->file_data, &start);
 	if (start == map->lines_count)
 		return (error_msg("process_map_data: missing map"));
-	
-	get_map_dimensions(map->file_data, &map->map_height, &map->map_width, start);
-
-	if (check_trailing_content(map->file_data, start + map->map_height) == FAILURE)
+	get_map_dimensions(map->file_data, map_height, map_width, start);
+	if (check_trailing_content(map->file_data, start + *map_height) == FAILURE)
 		return (FAILURE);
-
 	if (validate_map_chars(map->file_data, start) == FAILURE)
 		return (FAILURE);
-
 	if (build_map_grid(map, start) == FAILURE)
 		return (FAILURE);
-
 	if (find_player_position(player, map->grid) == FAILURE)
 		return (FAILURE);
-
 	if (validate_map_closure(map, player) == FAILURE)
 		return (FAILURE);
-
 	return (SUCCESS);
 }
 
@@ -45,7 +55,7 @@ int	build_map_grid(t_map *map, int i)
 			free_grid(map->grid);
 			map->grid = NULL;
 			return (FAILURE);
-		}	
+		}
 		grid_row++;
 		i++;
 	}
@@ -53,11 +63,11 @@ int	build_map_grid(t_map *map, int i)
 	return (SUCCESS);
 }
 
-int find_player_position(t_player *player, char **grid)
+int	find_player_position(t_player *player, char **grid)
 {
 	int	x;
 	int	y;
-	
+
 	y = 0;
 	while (grid[y])
 	{
@@ -70,7 +80,7 @@ int find_player_position(t_player *player, char **grid)
 				if (player->pl_dir == ' ')
 					set_player_position(player, grid[y][x], y, x);
 				else
-					return (error_msg("find_player_position: multiple player positions"));
+					return (error_msg("find_player_pos: multiple positions"));
 			}
 			x++;
 		}
@@ -99,20 +109,15 @@ int	validate_map_closure(t_map *map, t_player *player)
 
 int	flood_fill(t_map *map, char **grid, int x, int y)
 {
-	// check if we passed over the grid
 	if (y < 0 || y >= map->map_height)
 		return (FAILURE);
 	if (x < 0 || x >= map->map_width)
 		return (FAILURE);
-	// if we meet space
 	if (grid[y][x] == ' ')
 		return (FAILURE);
-	// if it's a wall, all good, return back
 	if (grid[y][x] == '1' || grid[y][x] == 'V')
 		return (SUCCESS);
-	// setting as 'V' - visited
 	grid[y][x] = 'V';
-	// Recursion
 	if (flood_fill(map, grid, x + 1, y) == FAILURE
 		|| flood_fill(map, grid, x - 1, y) == FAILURE
 		|| flood_fill(map, grid, x, y + 1) == FAILURE

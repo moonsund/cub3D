@@ -71,10 +71,9 @@ void free_file_data(char **file_data, int i); //TO_DO
 
 // parse_data.c
 int process_data_read(t_map *map, t_player *player);
+int	parse_map_params_lines(t_map *map, char *line, int *params);
 int parse_texture_line(t_map *map, char *str);
 int parse_colour_line(t_map *map, char *str);
-bool is_texture_identifier(char *str);
-bool is_color_identifier(char *str);
 
 // parse_texture_colour_utils.c
 int set_texture(char **dst, char *str);

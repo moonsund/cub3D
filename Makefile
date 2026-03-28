@@ -113,7 +113,8 @@ SRC_PARSING = \
 	parsing/parse_data.c \
 	parsing/parse_data_utils.c \
 	parsing/parse_map.c \
-	parsing/parse_map_utils.c \
+	parsing/parse_map_utils_1.c \
+	parsing/parse_map_utils_2.c \
 	parsing/parse_map_copy.c \
 
 SRC_GAME = \
