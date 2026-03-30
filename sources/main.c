@@ -12,10 +12,11 @@ int main(int argc, char **argv)
     if (parse_game_config(argv[1], &game.map, &game.player) == FAILURE)
         return (cleanup_game(&game), EXIT_FAILURE);
 
+    init_player_direction(&game.player);
+    
     if (game_loop(&game) == FAILURE)
         return (cleanup_game(&game), EXIT_FAILURE);
     
-    // Clean up resources
     cleanup_game(&game);
     return (0);
 }
