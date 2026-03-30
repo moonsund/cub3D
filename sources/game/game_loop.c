@@ -13,16 +13,10 @@ int	game_loop(t_game *game)
 	
 	register_hooks(game);
 	render_frame(game);
-	// start_main_loop(game);
+
+	// main game loop
 	mlx_loop_hook(game->mlx, game_render_loop, game);
 	mlx_loop(game->mlx);	
-
 	
 	return (SUCCESS);
 }
-
-// void	start_main_loop(t_game *game)
-// {
-// 	mlx_loop_hook(game->mlx, game_render_loop, game);
-// 	mlx_loop(game->mlx);
-// }

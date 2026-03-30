@@ -17,11 +17,11 @@ void	draw_minimap(t_game *game)
 		while (x < game->map.map_width)
 		{
 			if (game->map.grid[y][x] == '1')
-				color = 0x888888;
+				color = WALL_COLOUR;
 			else if (game->map.grid[y][x] == ' ')
-				color = 0x000000;
+				color = VOID_COLOUR;
 			else
-				color = 0x222222;
+				color = FIELD_COLOUR;
 			draw_square(game,
 				MINIMAP_OFFSET_X + x * MINIMAP_TILE,
 				MINIMAP_OFFSET_Y + y * MINIMAP_TILE,

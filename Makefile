@@ -123,7 +123,6 @@ SRC_GAME = \
 	game/player_init.c \
 	game/render.c \
 	game/raycast.c \
-	game/raycast_utils.c \
 	game/movement.c \
 	game/textures.c \
 	game/textures_render.c \

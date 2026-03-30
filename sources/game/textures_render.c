@@ -1,41 +1,12 @@
 #include "cub3d.h"
-#include <math.h>
-
-t_tex	*select_wall_texture(t_game *game, int side,
-	double ray_dir_x, double ray_dir_y)
-{
-	if (side == 0)
-	{
-		if (ray_dir_x > 0)
-			return (&game->tex_we);
-		else
-			return (&game->tex_ea);
-	}
-	else
-	{
-		if (ray_dir_y > 0)
-			return (&game->tex_no);
-		else
-			return (&game->tex_so);
-	}
-}
 
 static double	get_wall_x(t_game *game, int side,
-	double ray_dir_x, double ray_dir_y, double perp_wall_dist)
-{
-	double	wall_x;
-
-	if (side == 0)
-		wall_x = game->player.pl_y + perp_wall_dist * ray_dir_y;
-	else
-		wall_x = game->player.pl_x + perp_wall_dist * ray_dir_x;
-	wall_x -= floor(wall_x);
-	return (wall_x);
-}
+	double ray_dir_x, double ray_dir_y, double perp_wall_dist);
+static double	get_wall_x(t_game *game, int side,
+	double ray_dir_x, double ray_dir_y, double perp_wall_dist);
 
 void	draw_textured_wall(t_game *game, int x, int draw_start,
-	int draw_end, int side, double ray_dir_x,
-	double ray_dir_y, double perp_wall_dist)
+	int draw_end, int side, double ray_dir_x, double ray_dir_y, double perp_wall_dist)
 {
 	t_tex			*tex;
 	double			wall_x;
@@ -69,3 +40,36 @@ void	draw_textured_wall(t_game *game, int x, int draw_start,
 		y++;
 	}
 }
+
+t_tex	*select_wall_texture(t_game *game, int side,
+	double ray_dir_x, double ray_dir_y)
+{
+	if (side == 0)
+	{
+		if (ray_dir_x > 0)
+			return (&game->tex_we);
+		else
+			return (&game->tex_ea);
+	}
+	else
+	{
+		if (ray_dir_y > 0)
+			return (&game->tex_no);
+		else
+			return (&game->tex_so);
+	}
+}
+
+static double	get_wall_x(t_game *game, int side,
+	double ray_dir_x, double ray_dir_y, double perp_wall_dist)
+{
+	double	wall_x;
+
+	if (side == 0)
+		wall_x = game->player.pl_y + perp_wall_dist * ray_dir_y;
+	else
+		wall_x = game->player.pl_x + perp_wall_dist * ray_dir_x;
+	wall_x -= floor(wall_x);
+	return (wall_x);
+}
+

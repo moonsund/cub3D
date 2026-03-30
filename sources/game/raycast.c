@@ -1,6 +1,4 @@
 #include "cub3d.h"
-#include <math.h>
-
 
 static int	perform_dda(t_game *game, int *map_x, int *map_y,
 		double ray_dir_x, double ray_dir_y, double *perp_wall_dist);
@@ -8,6 +6,7 @@ static void	draw_wall_slice(t_game *game, int x, double perp_wall_dist,
 	int side, double ray_dir_x, double ray_dir_y);
 static void	calc_step_and_side(t_game *game, double ray_dir_x, double ray_dir_y,
 		int *step_x, int *step_y, double *side_dist_x, double *side_dist_y);
+static bool	is_wall(t_game *game, int x, int y);
 
 void	raycast(t_game *game)
 {
@@ -54,9 +53,9 @@ static int	perform_dda(t_game *game, int *map_x, int *map_y,
 		delta_dist_y = 1e30;
 	else
 		delta_dist_y = fabs(1.0 / ray_dir_y);
-	calc_step_and_side(game, ray_dir_x, ray_dir_y,
-		&step_x, &step_y, &side_dist_x, &side_dist_y);
-	while (1)
+	calc_step_and_side(game, ray_dir_x, ray_dir_y, &step_x, &step_y, &side_dist_x, &side_dist_y);
+	
+	while (true)
 	{
 		if (side_dist_x < side_dist_y)
 		{
@@ -77,6 +76,7 @@ static int	perform_dda(t_game *game, int *map_x, int *map_y,
 		*perp_wall_dist = side_dist_x - delta_dist_x;
 	else
 		*perp_wall_dist = side_dist_y - delta_dist_y;
+
 	return (side);
 }
 
@@ -125,8 +125,7 @@ static void	calc_step_and_side(t_game *game, double ray_dir_x, double ray_dir_y,
 	else
 	{
 		*step_x = 1;
-		*side_dist_x = ((int)game->player.pl_x + 1.0 - game->player.pl_x)
-			* delta_dist_x;
+		*side_dist_x = ((int)game->player.pl_x + 1.0 - game->player.pl_x)* delta_dist_x;
 	}
 	if (ray_dir_y < 0)
 	{
@@ -136,8 +135,17 @@ static void	calc_step_and_side(t_game *game, double ray_dir_x, double ray_dir_y,
 	else
 	{
 		*step_y = 1;
-		*side_dist_y = ((int)game->player.pl_y + 1.0 - game->player.pl_y)
-			* delta_dist_y;
+		*side_dist_y = ((int)game->player.pl_y + 1.0 - game->player.pl_y) * delta_dist_y;
 	}
 }
 
+static bool	is_wall(t_game *game, int x, int y)
+{
+	if (x < 0 || y < 0 || x >= game->map.map_width || y >= game->map.map_height)
+		return (true);
+	if (game->map.grid[y][x] == '1')
+		return (true);
+	if (game->map.grid[y][x] == ' ')
+		return (true);
+	return (false);
+}

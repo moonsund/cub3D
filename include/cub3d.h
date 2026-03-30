@@ -3,6 +3,7 @@
 
 # include "../libs/libft/libft.h"
 # include "../libs/minilibx-linux/mlx.h"
+# include <math.h>
 
 # include <stdio.h>
 # include <unistd.h>
@@ -20,11 +21,14 @@
 
 
 /* MINIMAP */
-#define MINIMAP_TILE 12
-#define MINIMAP_OFFSET_X 20
-#define MINIMAP_OFFSET_Y 20
-#define PLAYER_SIZE 4
-#define DIR_LINE_LEN 12
+# define MINIMAP_TILE 12
+# define MINIMAP_OFFSET_X 20
+# define MINIMAP_OFFSET_Y 20
+# define PLAYER_SIZE 4
+# define DIR_LINE_LEN 12
+# define WALL_COLOUR  0x000000  // чёрный
+# define FIELD_COLOUR 0x888888  // светло-серый
+# define VOID_COLOUR  0x333333  // тёмно-серый
 
 # ifdef __linux__
 #  define ESC_KEY 65307
@@ -215,10 +219,7 @@ void	rotate_right(t_game *game, double rot_speed);
 
 // raycast.c
 void	raycast(t_game *game);
-// void	draw_vertical_line(t_game *game, int x, int start, int end, int color);
 
-// raycast_utils.c
-int		is_wall(t_game *game, int x, int y);
 
 // textures.c
 int				load_textures(t_game *game);

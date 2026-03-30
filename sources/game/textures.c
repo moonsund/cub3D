@@ -1,30 +1,6 @@
 #include "cub3d.h"
 
-static void	init_texture_struct(t_tex *tex)
-{
-	tex->img = NULL;
-	tex->addr = NULL;
-	tex->bpp = 0;
-	tex->line_len = 0;
-	tex->endian = 0;
-	tex->width = 0;
-	tex->height = 0;
-	tex->pixels = NULL;
-}
-
-int	load_texture_image(void *mlx, char *path, t_tex *tex)
-{
-	init_texture_struct(tex);
-	tex->img = mlx_xpm_file_to_image(mlx, path, &tex->width, &tex->height);
-	if (!tex->img)
-		return (FAILURE);
-	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp,
-			&tex->line_len, &tex->endian);
-	if (!tex->addr)
-		return (FAILURE);
-	tex->pixels = (unsigned int *)tex->addr;
-	return (SUCCESS);
-}
+static void	init_texture_struct(t_tex *tex);
 
 int	load_textures(t_game *game)
 {
@@ -37,6 +13,37 @@ int	load_textures(t_game *game)
 	if (load_texture_image(game->mlx, game->map.tex_E, &game->tex_ea) != SUCCESS)
 		return (FAILURE);
 	return (SUCCESS);
+}
+
+int	load_texture_image(void *mlx, char *path, t_tex *tex)
+{
+	init_texture_struct(tex);
+	tex->img = mlx_xpm_file_to_image(mlx, path, &tex->width, &tex->height);
+	if (!tex->img)
+	{
+		error_msg("load_texture_image: mlx_xpm_file_to_image failed\n");
+		return (FAILURE);
+	}
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len, &tex->endian);
+	if (!tex->addr)
+	{
+		error_msg("load_texture_image: mlx_get_data_addr failed\n");
+		return (FAILURE);
+	}
+	tex->pixels = (unsigned int *)tex->addr;
+	return (SUCCESS);
+}
+
+static void	init_texture_struct(t_tex *tex)
+{
+	tex->img = NULL;
+	tex->addr = NULL;
+	tex->bpp = 0;
+	tex->line_len = 0;
+	tex->endian = 0;
+	tex->width = 0;
+	tex->height = 0;
+	tex->pixels = NULL;
 }
 
 unsigned int	get_texture_pixel(t_tex *tex, int x, int y)
