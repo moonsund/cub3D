@@ -118,7 +118,16 @@ SRC_PARSING = \
 
 SRC_GAME = \
 	game/events.c \
-	game/game.c \
+	game/game_loop.c \
+	game/init_graphics.c \
+	game/player_init.c \
+	game/render.c \
+	game/raycast.c \
+	game/raycast_utils.c \
+	game/movement.c \
+	game/textures.c \
+	game/textures_render.c \
+	game/minimap.c \
 
 SRC_INIT = \
 	init/init.c \

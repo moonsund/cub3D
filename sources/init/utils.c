@@ -23,20 +23,20 @@ void print_error_marker(void)
     write(2, "Error\n", 6);
 }
 
-// void cleanup_game(t_game *game)
-// {
-//     if (!game)
-//         return;
-//     cleanup_map(&game->map);
-//     if (game->win)
-//         mlx_destroy_window(game->mlx, game->win);
+void cleanup_game(t_game *game)
+{
+    if (!game)
+        return;
+    cleanup_map(&game->map);
+    if (game->win)
+        mlx_destroy_window(game->mlx, game->win);
 
-//     if (game->mlx)
-//     {
-//         mlx_destroy_display(game->mlx);
-//         free(game->mlx);
-//     }
-// }
+    if (game->mlx)
+    {
+        mlx_destroy_display(game->mlx);
+        free(game->mlx);
+    }
+}
 
 void cleanup_map(t_map *map)
 {
