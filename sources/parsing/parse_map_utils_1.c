@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:33:27 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/03/28 13:48:16 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:25:52 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	check_trailing_content(char **lines, int i)
 {
 	char	*err_msg;
 
-	err_msg = "check_trailing_content: unexpected content after map";
+	err_msg = "check_trailing_content: unexpected content after map.";
 	while (lines[i])
 	{
 		if (!line_is_empty(lines[i]))

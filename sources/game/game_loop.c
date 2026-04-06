@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_loop.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/04 22:30:59 by asharafe          #+#    #+#             */
+/*   Updated: 2026/04/04 22:31:18 by asharafe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	game_loop(t_game *game)
@@ -10,13 +22,9 @@ int	game_loop(t_game *game)
 		return (FAILURE);
 	if (load_textures(game) != SUCCESS)
 		return (FAILURE);
-	
 	register_hooks(game);
 	render_frame(game);
-
-	// main game loop
 	mlx_loop_hook(game->mlx, game_render_loop, game);
-	mlx_loop(game->mlx);	
-	
+	mlx_loop(game->mlx);
 	return (SUCCESS);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minimap.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/04 22:31:48 by asharafe          #+#    #+#             */
+/*   Updated: 2026/04/04 22:33:31 by asharafe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static void	draw_square(t_game *game, int start_x, int start_y, int color);
@@ -22,8 +34,7 @@ void	draw_minimap(t_game *game)
 				color = VOID_COLOUR;
 			else
 				color = FIELD_COLOUR;
-			draw_square(game,
-				MINIMAP_OFFSET_X + x * MINIMAP_TILE,
+			draw_square(game, MINIMAP_OFFSET_X + x * MINIMAP_TILE,
 				MINIMAP_OFFSET_Y + y * MINIMAP_TILE,
 				color);
 			x++;
@@ -85,14 +96,11 @@ static void	draw_player_direction(t_game *game)
 	step = 0.5;
 	while (i < DIR_LINE_LEN * 2)
 	{
-		x = MINIMAP_OFFSET_X
-			+ (int)((game->player.pl_x + game->player.dir_x * i * step / MINIMAP_TILE)
-				* MINIMAP_TILE);
-		y = MINIMAP_OFFSET_Y
-			+ (int)((game->player.pl_y + game->player.dir_y * i * step / MINIMAP_TILE)
-				* MINIMAP_TILE);
+		x = MINIMAP_OFFSET_X + (int)((game->player.pl_x + game->player.dir_x * 
+					i * step / MINIMAP_TILE) * MINIMAP_TILE);
+		y = MINIMAP_OFFSET_Y + (int)((game->player.pl_y + game->player.dir_y * 
+					i * step / MINIMAP_TILE) * MINIMAP_TILE);
 		put_pixel(&game->frame, x, y, 0xFF0000);
 		i++;
 	}
 }
-

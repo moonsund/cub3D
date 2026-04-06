@@ -1,151 +1,120 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycast.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/04 22:19:04 by asharafe          #+#    #+#             */
+/*   Updated: 2026/04/04 22:45:20 by asharafe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-static int	perform_dda(t_game *game, int *map_x, int *map_y,
-		double ray_dir_x, double ray_dir_y, double *perp_wall_dist);
-static void	draw_wall_slice(t_game *game, int x, double perp_wall_dist,
-	int side, double ray_dir_x, double ray_dir_y);
-static void	calc_step_and_side(t_game *game, double ray_dir_x, double ray_dir_y,
-		int *step_x, int *step_y, double *side_dist_x, double *side_dist_y);
-static bool	is_wall(t_game *game, int x, int y);
+static void	init_ray(t_game *game, t_ray *ray, int x);
+static void	set_step_side(t_game *game, t_ray *ray);
+static void	perform_dda(t_game *game, t_ray *ray);
+static void	calculate_line(t_ray *ray);
 
 void	raycast(t_game *game)
 {
+	t_ray	ray;
 	int		x;
-	double	camera_x;
-	double	ray_dir_x;
-	double	ray_dir_y;
-	int		map_x;
-	int		map_y;
-	double	perp_wall_dist;
-	int		side;
 
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		camera_x = 2.0 * x / (double)WIN_WIDTH - 1.0;
-		ray_dir_x = game->player.dir_x + game->player.plane_x * camera_x;
-		ray_dir_y = game->player.dir_y + game->player.plane_y * camera_x;
-		map_x = (int)game->player.pl_x;
-		map_y = (int)game->player.pl_y;
-		side = perform_dda(game, &map_x, &map_y,
-				ray_dir_x, ray_dir_y, &perp_wall_dist);
-		draw_wall_slice(game, x, perp_wall_dist, side, ray_dir_x, ray_dir_y);
+		init_ray(game, &ray, x);
+		set_step_side(game, &ray);
+		perform_dda(game, &ray);
+		calculate_line(&ray);
+		draw_textured_wall(game, x, &ray);
 		x++;
 	}
 }
 
-static int	perform_dda(t_game *game, int *map_x, int *map_y,
-		double ray_dir_x, double ray_dir_y, double *perp_wall_dist)
+static void	init_ray(t_game *game, t_ray *ray, int x)
 {
-	double	delta_dist_x;
-	double	delta_dist_y;
-	double	side_dist_x;
-	double	side_dist_y;
-	int		step_x;
-	int		step_y;
-	int		side;
+	ray->camera_x = 2.0 * x / (double)WIN_WIDTH - 1.0;
+	ray->ray_dir_x = game->player.dir_x + game->player.plane_x * ray->camera_x;
+	ray->ray_dir_y = game->player.dir_y + game->player.plane_y * ray->camera_x;
+	ray->map_x = (int)game->player.pl_x;
+	ray->map_y = (int)game->player.pl_y;
+	if (ray->ray_dir_x == 0)
+		ray->delta_dist_x = 1e30;
+	else
+		ray->delta_dist_x = fabs(1.0 / ray->ray_dir_x);
+	if (ray->ray_dir_y == 0)
+		ray->delta_dist_y = 1e30;
+	else
+		ray->delta_dist_y = fabs(1.0 / ray->ray_dir_y);
+}
 
-	if (ray_dir_x == 0)
-		delta_dist_x = 1e30;
-	else
-		delta_dist_x = fabs(1.0 / ray_dir_x);
-	if (ray_dir_y == 0)
-		delta_dist_y = 1e30;
-	else
-		delta_dist_y = fabs(1.0 / ray_dir_y);
-	calc_step_and_side(game, ray_dir_x, ray_dir_y, &step_x, &step_y, &side_dist_x, &side_dist_y);
-	
-	while (true)
+static void	set_step_side(t_game *game, t_ray *ray)
+{
+	if (ray->ray_dir_x < 0)
 	{
-		if (side_dist_x < side_dist_y)
+		ray->step_x = -1;
+		ray->side_dist_x = (game->player.pl_x - ray->map_x) * ray->delta_dist_x;
+	}
+	else
+	{
+		ray->step_x = 1;
+		ray->side_dist_x = (ray->map_x + 1.0 - game->player.pl_x) 
+			* ray->delta_dist_x;
+	}
+	if (ray->ray_dir_y < 0)
+	{
+		ray->step_y = -1;
+		ray->side_dist_y = (game->player.pl_y - ray->map_y) 
+			* ray->delta_dist_y;
+	}
+	else
+	{
+		ray->step_y = 1;
+		ray->side_dist_y = (ray->map_y + 1.0 - game->player.pl_y) 
+			* ray->delta_dist_y;
+	}
+}
+
+static void	perform_dda(t_game *game, t_ray *ray)
+{
+	int	hit;
+
+	hit = 0;
+	while (hit == 0)
+	{
+		if (ray->side_dist_x < ray->side_dist_y)
 		{
-			side_dist_x += delta_dist_x;
-			*map_x += step_x;
-			side = 0;
+			ray->side_dist_x += ray->delta_dist_x;
+			ray->map_x += ray->step_x;
+			ray->side = 0;
 		}
 		else
 		{
-			side_dist_y += delta_dist_y;
-			*map_y += step_y;
-			side = 1;
+			ray->side_dist_y += ray->delta_dist_y;
+			ray->map_y += ray->step_y;
+			ray->side = 1;
 		}
-		if (is_wall(game, *map_x, *map_y))
-			break ;
-	}
-	if (side == 0)
-		*perp_wall_dist = side_dist_x - delta_dist_x;
-	else
-		*perp_wall_dist = side_dist_y - delta_dist_y;
-
-	return (side);
-}
-
-static void	draw_wall_slice(t_game *game, int x, double perp_wall_dist,
-	int side, double ray_dir_x, double ray_dir_y)
-{
-	int	line_height;
-	int	draw_start;
-	int	draw_end;
-
-	if (perp_wall_dist <= 0.0)
-		perp_wall_dist = 0.1;
-
-	line_height = (int)(WIN_HEIGHT / perp_wall_dist);
-	draw_start = -line_height / 2 + WIN_HEIGHT / 2;
-	draw_end = line_height / 2 + WIN_HEIGHT / 2;
-
-	if (draw_start < 0)
-		draw_start = 0;
-	if (draw_end >= WIN_HEIGHT)
-		draw_end = WIN_HEIGHT - 1;
-
-	draw_textured_wall(game, x, draw_start, draw_end,
-		side, ray_dir_x, ray_dir_y, perp_wall_dist);
-}
-
-static void	calc_step_and_side(t_game *game, double ray_dir_x, double ray_dir_y,
-		int *step_x, int *step_y, double *side_dist_x, double *side_dist_y)
-{
-	double	delta_dist_x;
-	double	delta_dist_y;
-
-	if (ray_dir_x == 0)
-		delta_dist_x = 1e30;
-	else
-		delta_dist_x = fabs(1.0 / ray_dir_x);
-	if (ray_dir_y == 0)
-		delta_dist_y = 1e30;
-	else
-		delta_dist_y = fabs(1.0 / ray_dir_y);
-	if (ray_dir_x < 0)
-	{
-		*step_x = -1;
-		*side_dist_x = (game->player.pl_x - (int)game->player.pl_x) * delta_dist_x;
-	}
-	else
-	{
-		*step_x = 1;
-		*side_dist_x = ((int)game->player.pl_x + 1.0 - game->player.pl_x)* delta_dist_x;
-	}
-	if (ray_dir_y < 0)
-	{
-		*step_y = -1;
-		*side_dist_y = (game->player.pl_y - (int)game->player.pl_y) * delta_dist_y;
-	}
-	else
-	{
-		*step_y = 1;
-		*side_dist_y = ((int)game->player.pl_y + 1.0 - game->player.pl_y) * delta_dist_y;
+		if (is_wall(game, ray->map_x, ray->map_y))
+			hit = 1;
 	}
 }
 
-static bool	is_wall(t_game *game, int x, int y)
+static void	calculate_line(t_ray *ray)
 {
-	if (x < 0 || y < 0 || x >= game->map.map_width || y >= game->map.map_height)
-		return (true);
-	if (game->map.grid[y][x] == '1')
-		return (true);
-	if (game->map.grid[y][x] == ' ')
-		return (true);
-	return (false);
+	if (ray->side == 0)
+		ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
+	else
+		ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
+	if (ray->perp_wall_dist <= 0)
+		ray->perp_wall_dist = 0.1;
+	ray->line_height = (int)(WIN_HEIGHT / ray->perp_wall_dist);
+	ray->draw_start = -ray->line_height / 2 + WIN_HEIGHT / 2;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	ray->draw_end = ray->line_height / 2 + WIN_HEIGHT / 2;
+	if (ray->draw_end >= WIN_HEIGHT)
+		ray->draw_end = WIN_HEIGHT - 1;
 }

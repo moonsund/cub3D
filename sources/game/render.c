@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/04 22:23:43 by asharafe          #+#    #+#             */
+/*   Updated: 2026/04/04 22:42:07 by asharafe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	render_frame(t_game *game)
@@ -46,4 +58,15 @@ int	game_render_loop(t_game *game)
 	update_player(game);
 	render_frame(game);
 	return (SUCCESS);
+}
+
+bool	is_wall(t_game *game, int x, int y)
+{
+	if (x < 0 || y < 0 || x >= game->map.map_width || y >= game->map.map_height)
+		return (true);
+	if (game->map.grid[y][x] == '1')
+		return (true);
+	if (game->map.grid[y][x] == ' ')
+		return (true);
+	return (false);
 }

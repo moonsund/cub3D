@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:33:32 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/03/28 13:37:47 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:25:55 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	validate_map_chars(char **lines, int i)
 	int		j;
 	char	*err_msg;
 
-	err_msg = "validate_map_chars: map contains forbidden character";
+	err_msg = "validate_map_chars: map contains forbidden character.";
 	while (lines[i])
 	{
 		j = 0;

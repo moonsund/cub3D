@@ -124,14 +124,16 @@ SRC_GAME = \
 	game/player_init.c \
 	game/render.c \
 	game/raycast.c \
-	game/movement.c \
+	game/movement_1.c \
+	game/movement_2.c \
 	game/textures.c \
 	game/textures_render.c \
 	game/minimap.c \
 
 SRC_INIT = \
 	init/init.c \
-	init/utils.c \
+	init/errors.c \
+	init/cleanup.c \
 	init/validation.c \
 	
 SRC_FILES = \

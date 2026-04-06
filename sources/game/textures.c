@@ -1,16 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   textures.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/04 22:42:22 by asharafe          #+#    #+#             */
+/*   Updated: 2026/04/06 18:27:42 by aidarsharaf      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static void	init_texture_struct(t_tex *tex);
 
 int	load_textures(t_game *game)
 {
-	if (load_texture_image(game->mlx, game->map.tex_N, &game->tex_no) != SUCCESS)
+	if (load_texture_image(game->mlx, 
+			game->map.tex_n, &game->tex_no) != SUCCESS)
 		return (FAILURE);
-	if (load_texture_image(game->mlx, game->map.tex_S, &game->tex_so) != SUCCESS)
+	if (load_texture_image(game->mlx, game->map.tex_s, 
+			&game->tex_so) != SUCCESS)
 		return (FAILURE);
-	if (load_texture_image(game->mlx, game->map.tex_W, &game->tex_we) != SUCCESS)
+	if (load_texture_image(game->mlx, game->map.tex_w, 
+			&game->tex_we) != SUCCESS)
 		return (FAILURE);
-	if (load_texture_image(game->mlx, game->map.tex_E, &game->tex_ea) != SUCCESS)
+	if (load_texture_image(game->mlx, game->map.tex_e, 
+			&game->tex_ea) != SUCCESS)
 		return (FAILURE);
 	return (SUCCESS);
 }
@@ -21,13 +37,14 @@ int	load_texture_image(void *mlx, char *path, t_tex *tex)
 	tex->img = mlx_xpm_file_to_image(mlx, path, &tex->width, &tex->height);
 	if (!tex->img)
 	{
-		error_msg("load_texture_image: mlx_xpm_file_to_image failed\n");
+		error_msg("load_texture_image: mlx_xpm_file_to_image failed.");
 		return (FAILURE);
 	}
-	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len, &tex->endian);
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, 
+			&tex->line_len, &tex->endian);
 	if (!tex->addr)
 	{
-		error_msg("load_texture_image: mlx_get_data_addr failed\n");
+		error_msg("load_texture_image: mlx_get_data_addr failed.");
 		return (FAILURE);
 	}
 	tex->pixels = (unsigned int *)tex->addr;

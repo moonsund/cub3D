@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:33:41 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/03/28 13:56:49 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:26:15 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	parse_game_config(const char *file_path, t_map *map, t_player *player)
 		return (FAILURE);
 	map->file_data = malloc(sizeof(char *) * (map->lines_count + 1));
 	if (!map->file_data)
-		return (error_errno("fill_map"));
+		return (error_errno("fill_map."));
 	if (read_file(file_path, map) == FAILURE)
 		return (FAILURE);
 	if (process_data_read(map, player) == FAILURE)

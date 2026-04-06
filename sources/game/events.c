@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asharafe <asharafe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/04 22:30:33 by asharafe          #+#    #+#             */
+/*   Updated: 2026/04/04 22:53:26 by asharafe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	register_hooks(t_game *game)
@@ -9,11 +21,10 @@ void	register_hooks(t_game *game)
 
 int	close_game(t_game *game)
 {
-	if (game->frame.img)
-		mlx_destroy_image(game->mlx, game->frame.img);
-	if (game->win)
-		mlx_destroy_window(game->mlx, game->win);
-	return (SUCCESS);
+	if (!game)
+		exit(1);
+	cleanup_game(game);
+	exit(0);
 }
 
 int	key_press(int keycode, t_game *game)

@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:33:11 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/03/28 13:56:06 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:24:56 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	count_lines_in_file(const char *file_path, int *lines_count)
 		return (error_errno("count_lines"));
 	line = get_next_line(fd);
 	if (!line)
-		return (close(fd), error_msg("count_lines: The file is empty.\n"));
+		return (close(fd), error_msg("count_lines: The file is empty."));
 	i = 0;
 	while (line)
 	{
@@ -76,7 +76,7 @@ char	*trim_if_needed(char *str)
 	return (ft_strdup(str));
 }
 
-void	free_file_data(char **file_data, int i) //TO_DO
+void	free_file_data(char **file_data, int i)
 {
 	(void)file_data;
 	(void)i;

@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:33:18 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/03/28 13:49:59 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:25:47 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	**copy_grid(t_map *map)
 		if (!grid_copy[i])
 		{
 			print_error_marker();
-			return (perror("copy_grid: ft_strdup failed"), NULL);
+			return (perror("copy_grid: ft_strdup failed."), NULL);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:33:37 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/03/28 13:46:00 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:26:10 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	parse_map_section(t_map *map, t_player *player, int start)
 	map_width = &map->map_width;
 	skip_empty_lines(map->file_data, &start);
 	if (start == map->lines_count)
-		return (error_msg("process_map_data: missing map"));
+		return (error_msg("process_map_data: missing map."));
 	get_map_dimensions(map->file_data, map_height, map_width, start);
 	if (check_trailing_content(map->file_data, start + *map_height) == FAILURE)
 		return (FAILURE);
@@ -80,14 +80,14 @@ int	find_player_position(t_player *player, char **grid)
 				if (player->pl_dir == ' ')
 					set_player_position(player, grid[y][x], y, x);
 				else
-					return (error_msg("find_player_pos: multiple positions"));
+					return (error_msg("find_player_pos: multiple positions."));
 			}
 			x++;
 		}
 		y++;
 	}
 	if (player->pl_dir == ' ')
-		return (error_msg("find_player_position: missing player position"));
+		return (error_msg("find_player_position: missing player position."));
 	return (SUCCESS);
 }
 
@@ -101,7 +101,7 @@ int	validate_map_closure(t_map *map, t_player *player)
 	if (flood_fill(map, grid_copy, player->pl_x, player->pl_y) == FAILURE)
 	{
 		free_grid(grid_copy);
-		return (error_msg("validate_map_closure: map is not enclosed"));
+		return (error_msg("validate_map_closure: map is not enclosed."));
 	}
 	free_grid(grid_copy);
 	return (SUCCESS);
