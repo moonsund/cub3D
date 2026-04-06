@@ -1,0 +1,15 @@
+NO=./textures/north.xpm
+SO=./textures/south.xpm
+WE=./textures/west.xpm
+EA=./textures/east.xpm
+F=14443520
+C=14753280
+PLAYER=4,2,N
+MAP_W=6
+MAP_H=5
+MAP:
+grid[0]="111111"
+grid[1]="100001"
+grid[2]="1000N1"
+grid[3]="100001"
+grid[4]="111111"
