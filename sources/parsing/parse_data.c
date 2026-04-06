@@ -6,7 +6,7 @@
 /*   By: aidarsharafeev <aidarsharafeev@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 13:32:55 by aidarsharaf       #+#    #+#             */
-/*   Updated: 2026/04/06 18:25:38 by aidarsharaf      ###   ########.fr       */
+/*   Updated: 2026/04/06 18:33:00 by aidarsharaf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	parse_colour_line(t_map *map, char *str)
 	else if (tmp[0][0] == 'C' && tmp[0][1] == '\0')
 		return_code = set_colour(tmp[1], &map->ceiling_color);
 	else
-		return_code = error_msg("get_colours_data: unknown colour id".);
+		return_code = error_msg("get_colours_data: unknown colour id.");
 	free_split(tmp);
 	return (return_code);
 }
